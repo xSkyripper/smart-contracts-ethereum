@@ -1,0 +1,9 @@
+* = All members
+
+Lab 1: - 
+Lab 2:
+    State-of-the-Art: *
+Lab 3:
+    Problem 1: Alexandru
+    Problem 2: Alexandru, Ioana
+    Problem 3: * 
