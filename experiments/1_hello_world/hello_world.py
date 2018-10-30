@@ -1,13 +1,11 @@
 from web3 import Web3
 from solc import compile_files
+import sys
 
+def main(ethereum_net_addr):
+    w3 = Web3(Web3.HTTPProvider(ethereum_net_addr))
+    w3.eth.defaultAccount = w3.eth.accounts[0]
 
-ETHEREUM_NET = "http://127.0.0.1:8545"
-w3 = Web3(Web3.HTTPProvider(ETHEREUM_NET))
-w3.eth.defaultAccount = w3.eth.accounts[0]
-
-
-def main():
     print("=== Experiment 1: Hello world on Private Ethereum Network ===")
 
     # Compile the Solidity
@@ -45,14 +43,5 @@ def main():
         greeter.functions.greet().call()
     ))
 
-    
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
