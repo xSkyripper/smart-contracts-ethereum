@@ -15,7 +15,7 @@ def main(ethereum_net_addr):
 
     # Get contract object
     voting_contract = w3.eth.contract(abi=contract_interface['abi'],
-                                       bytecode=contract_interface['bin'])
+                                      bytecode=contract_interface['bin'])
 
     # Deploy the contract and get the address
     print("Deploying contract to network ...")
@@ -27,7 +27,7 @@ def main(ethereum_net_addr):
 
     # Get contract instance
     voting = w3.eth.contract(address=tx_receipt.contractAddress,
-                              abi=contract_interface['abi'],)
+                             abi=contract_interface['abi'],)
 
     bytes_john = bytes('John', 'utf-8')
     bytes_alex = bytes('Alex', 'utf-8')
