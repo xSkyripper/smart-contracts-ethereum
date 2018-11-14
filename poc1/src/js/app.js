@@ -88,7 +88,6 @@ App = {
         event.preventDefault();
 
         var billId = parseInt($(event.target).data('id'));
-
         var paymentInstance;
 
         web3.eth.getAccounts(function(error, accounts) {
@@ -102,7 +101,7 @@ App = {
                 paymentInstance = instance;
 
                 // Execute pay as a transaction by sending account
-                return paymentInstance.pay(billdId, {
+                return paymentInstance.pay(billId, {
                     from: account
                 });
             }).then(function(result) {
