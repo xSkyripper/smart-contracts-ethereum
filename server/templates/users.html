@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Users</title>
+</head>
+<body>
+    <form action="" method="POST">
+        <label>Gov Id:
+            <input type="text" id="gov_id" name="gov_id">
+        </label>
+        </br>
+
+        <label>First Name:
+                <input type="text" id="first_name" name="first_name">
+        </label>
+        </br>
+
+        <label>Last Name:
+                <input type="text" id="last_name" name="last_name">
+        </label>
+        </br>
+
+        <button type="submit">Register</button>
+    </form>
+    
+    <h2>Users</h2>
+    <table>
+        <tr>
+            <th>Gov Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+           <td>{{ user['gov_id'] }}</td>
+           <td>{{ user['first_name'] }}</td>
+           <td>{{ user['last_name'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
