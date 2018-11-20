@@ -1,20 +1,20 @@
 import logging
+import aspectlib
+from aspectlib import Aspect, Return, Proceed
 
-def before(fn):
+
+@Aspect(bind=True)
+def before(cut_point, *args, **kws):  
     """
     Display a message before calling a function
     """
-    def wrapped(*args, **kws):
-        logging.warn('Before function %s.' % fn.func_name)
-        return fn(*args, **kws)
-    return wrapped
-
-def after(fn):
+    logging.warn('Before function %s.' % cut_point.__name__)
+    yield
+    
+@Aspect(bind=True)
+def after(cut_point, *args, **kws):
     """
-    Display a message after calling a function
+    Display a message before calling a function
     """
-    def wrapped(*args, **kws):
-        retVal = fn(*args, **kws)
-        logging.warn('After function %s.' % fn.func_name)
-        return retVal
-    return wrapped
+    yield
+    logging.warn('After function %s.' % cut_point.__name__)
