@@ -3,43 +3,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Users</title>
 </head>
 <body>
-    <form action="" method="POST">
-        <label>Gov Id:
-            <input type="text" id="gov_id" name="gov_id">
-        </label>
-        </br>
-
-        <label>First Name:
-                <input type="text" id="first_name" name="first_name">
-        </label>
-        </br>
-
-        <label>Last Name:
-                <input type="text" id="last_name" name="last_name">
-        </label>
-        </br>
-
-        <button type="submit">Register</button>
-    </form>
-    
-    <h2>Users</h2>
-    <table>
-        <tr>
-            <th>Gov Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-        </tr>
-        {% for user in users %}
-        <tr>
-           <td>{{ user['gov_id'] }}</td>
-           <td>{{ user['first_name'] }}</td>
-           <td>{{ user['last_name'] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <h1>Smart Ethereum Contracts - Register</h1>
+                <form action="" method="POST">
+                    <div class="form-group">
+                        <label for="gov_id">Gov Id</label>
+                        <input type="text" class="form-control" id="gov_id" name="gov_id"
+                        placeholder="Gov ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                
+                <h2>Users</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Gov Id</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Ethereum Id</th>
+                        </tr>
+                    </thead>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user['gov_id'] }}</td>
+                            <td>{{ user['first_name'] }}</td>
+                            <td>{{ user['last_name'] }}</td>
+                            <td>{{ user['ethereum_id'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
