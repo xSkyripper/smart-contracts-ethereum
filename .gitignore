@@ -4,3 +4,4 @@ node_modules
 server/.vscode/.ropeproject/config.py
 server/app/__pycache__/__init__.cpython-37.pyc
 *.db
+*.pyc
