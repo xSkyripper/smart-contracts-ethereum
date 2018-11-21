@@ -11,19 +11,33 @@ def encrypt(cut_point, *args, **kws):
     """
     Encrypts the arguments of the given function.
     """
-    # encrypt message
     f = Fernet(crypto_key)
-    encrypted_args = [f.encrypt(arg) for arg in args]
-    yield aspectlib.Proceed(encrypted_args, kws)
+    # Encrypt all arguments
+    encoded_args = list()
+    for arg in args:
+        if not isinstance(arg, bytes):
+            arg = arg.encode()
+        encoded_args.append(arg)
+    encrypted_args = [f.encrypt(arg) for arg in encoded_args]
+    # Call function with encrypted arguments
+    yield aspectlib.Proceed(*encrypted_args)
 
 @Aspect(bind=True)
 def decrypt(cut_point, *args, **kws):
     """
-    Decrypts the result of the given function.
+    Decrypts the args of the given function.
     """
-    result = yield aspectlib.Proceed
     f = Fernet(crypto_key)
-    return aspectlib.Return(f.decrypt(result))
+    # Decrypt all arguments
+    decrypted_args = list()
+    for arg in args:
+        if not isinstance(arg, bytes):
+            arg = arg.decode()
+        decrypted_args.append(arg)
+    decrypted_args = [f.decrypt(arg) for arg in args]
+    # Call function with decrypted arguments
+    yield aspectlib.Proceed(*decrypted_args)
+
 
 
 

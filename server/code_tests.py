@@ -5,13 +5,15 @@ from app.decorators.LoggingAspect import before, after
 @after
 @encrypt
 def send_data(data:str):
-    print('sending: %s' % data)
+    print('sending: {0}'.format(data))
     return data
 
 @before
 @after
-def receive_data(data:str):
-    print('received: %s' % data)
-    return data
+@decrypt
+def receive_data(data:bytes):
+    print('received: {0}'.format(data))
 
-receive_data(send_data(b'Hello'))
+
+sent_data = send_data(b'Hello')
+receive_data(sent_data)
