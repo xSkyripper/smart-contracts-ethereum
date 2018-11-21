@@ -1,15 +1,13 @@
 from app.aspects.CryptoAspect import encrypt, decrypt
 from app.decorators.LoggingAspect import before, after
 
-@before
-@after
+
 @encrypt
 def send_data(data:str):
     print('sending: {0}'.format(data))
     return data
 
-@before
-@after
+
 @decrypt
 def receive_data(data:bytes):
     print('received: {0}'.format(data))
