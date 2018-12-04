@@ -1,20 +1,27 @@
 import os
 from flask import Flask, current_app, send_file
+from flask_sqlalchemy import SQLAlchemy
 
-from .api import api_bp
-from .client import client_bp
 
-app = Flask(__name__, static_folder='../dist/static')
-app.register_blueprint(api_bp)
-# app.register_blueprint(client_bp)
+db = SQLAlchemy()
 
-from .config import Config
-app.logger.info('>>> {}'.format(Config.FLASK_ENV))
+def create_app():
+    app = Flask(__name__, static_folder='../dist/static')
 
-@app.route('/')
-def index_client():
-    dist_dir = current_app.config['DIST_DIR']
-    entry = os.path.join(dist_dir, 'index.html')
-    return send_file(entry)
+    from app.config import Config
+    app.config.from_object('app.config.Config')
+
+    app.logger.info('>>> {}'.format(Config.FLASK_ENV))
+
+    from app.main import main_bp
+    app.register_blueprint(main_bp)
+
+    from app.api import api_bp
+    app.register_blueprint(api_bp)
+
+    return app
+    # from app.client import client_bp
+    # app.register_blueprint(client_bp)
+
 
 
