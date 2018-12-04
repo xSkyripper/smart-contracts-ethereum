@@ -9,7 +9,7 @@ db = SQLAlchemy()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
-login_manager.login_view = 'account.login'
+login_manager.login_view = 'main_bp.login'
 
 
 def create_app(config_name):
