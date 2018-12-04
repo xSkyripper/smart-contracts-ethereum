@@ -1,27 +1,19 @@
 <template>
-    <div class="register">
-        <a href="" @click.prevent="register">Register</a>
-    </div>
+    <RegisterComponent msg="Register to CryptoTax"/>
 </template>
 
 <script>
 
+import RegisterComponent from '@/components/RegisterComponent.vue'
+
 export default {
   name: 'register',
-  data () {
-    return {
-      resources: [],
-      error: ''
-    }
-  },
-  methods: {
-    register () {
-      alert('Register')
-    }
+  components: {
+    RegisterComponent
   }
 }
-
 </script>
 
 <style lang="scss">
+
 </style>

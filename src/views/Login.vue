@@ -1,27 +1,19 @@
 <template>
-    <div class="login">
-        <a href="" @click.prevent="login">Login</a>
-    </div>
+    <LoginComponent msg="Login to CryptoTax"/>
 </template>
 
 <script>
 
+import LoginComponent from '@/components/LoginComponent.vue'
+
 export default {
   name: 'login',
-  data () {
-    return {
-      resources: [],
-      error: ''
-    }
-  },
-  methods: {
-    login () {
-      alert('Login')
-    }
+  components: {
+    LoginComponent
   }
 }
-
 </script>
 
 <style lang="scss">
+
 </style>

@@ -1,13 +1,13 @@
 <template>
-  <div class="login">
+  <div class="contracts">
     <h1>{{ msg }}</h1>
-    <a href="" @click.prevent="login">Login</a>
+    <a href="" @click.prevent="contracts">Contracts</a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'LoginComponent',
+  name: 'ContractsComponent',
   props: {
     msg: String
   },
@@ -18,8 +18,8 @@ export default {
     }
   },
   methods: {
-    login () {
-      alert('Login')
+    contracts () {
+      alert('Contracts')
     }
   }
 }

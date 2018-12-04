@@ -1,27 +1,19 @@
 <template>
-    <div class="contracts">
-        <a href="" @click.prevent="contracts">Contracts</a>
-    </div>
+    <ContractsComponent msg="Contracts from CryptoTax"/>
 </template>
 
 <script>
 
+import ContractsComponent from '@/components/ContractsComponent.vue'
+
 export default {
   name: 'contracts',
-  data () {
-    return {
-      resources: [],
-      error: ''
-    }
-  },
-  methods: {
-    contracts () {
-      alert('Contracts')
-    }
+  components: {
+    ContractsComponent
   }
 }
-
 </script>
 
 <style lang="scss">
+
 </style>

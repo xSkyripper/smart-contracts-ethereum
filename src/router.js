@@ -47,7 +47,7 @@ export default new Router({
       name: 'contracts',
       component: Contracts,
       meta: {
-        title: 'E tuuuu'
+        title: 'Contracts'
       }
     }
   ]
