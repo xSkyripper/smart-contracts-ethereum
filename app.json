@@ -5,6 +5,9 @@
   "repository": "https://github.com/gtalarico/flask-vuejs-template",
   "logo": "https://raw.githubusercontent.com/gtalarico/flask-vuejs-template/master/app/client/app/src/assets/img/logo.png",
   "keywords": ["flask", "vue"],
+  "scripts": {
+    "postdeploy": "python manage.py recreate_db && python manage.py setup_prod && python manage.py add_fake_data"
+  },
   "env": {
     "FLASK_ENV": {
       "description": "Flask Enviroment",
@@ -13,6 +16,15 @@
     "SECRET": {
       "description": "Flask Secret Key",
       "value": "YourKeyHere"
+    },
+    "SECRET_KEY": {
+      "generator": "secret"
+    },
+    "MAIL_USERNAME": {
+      "required": true
+    },
+    "MAIL_PASSWORD": {
+      "required": true
     }
    },
   "addons": [

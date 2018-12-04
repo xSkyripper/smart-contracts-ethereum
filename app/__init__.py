@@ -1,27 +1,40 @@
 import os
 from flask import Flask, current_app, send_file
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
+from app.config import config
 
 db = SQLAlchemy()
 
-def create_app():
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'account.login'
+
+
+def create_app(config_name):
     app = Flask(__name__, static_folder='../dist/static')
 
-    from app.config import Config
-    app.config.from_object('app.config.Config')
+    config_cls = config[config_name]
+    app.config.from_object(config_cls)
+    
+    # Modules init goes here
+    config_cls.init_app(app)
+    db.init_app(app)
+    login_manager.init_app(app)
 
-    app.logger.info('>>> {}'.format(Config.FLASK_ENV))
+    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+        from flask_sslify import SSLify
+        SSLify(app)
 
+    # Blueprints registration goes here
     from app.main import main_bp
-    app.register_blueprint(main_bp)
-
     from app.api import api_bp
+    app.register_blueprint(main_bp)
     app.register_blueprint(api_bp)
 
+    app.logger.info('>>> {}'.format(config_cls.FLASK_ENV))
     return app
-    # from app.client import client_bp
-    # app.register_blueprint(client_bp)
 
 
 

@@ -5,10 +5,19 @@ name = "pypi"
 
 [packages]
 gunicorn = "==19.7.1"
-flask-restplus = "*"
 python-dotenv = "*"
+pylint = "*"
 flask = "*"
-flask-sqlalchemy = "==2.1"
+flask-sqlalchemy = "*"
+flask-restplus = "*"
+flask-login = "*"
+pylint-flask = "*"
+werkzeug = "*"
+itsdangerous = "*"
+flask-script = "*"
+flask-sslify = "*"
+flask-migrate = "*"
+faker = "*"
 
 [dev-packages]
 pytest = "*"
