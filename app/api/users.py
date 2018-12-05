@@ -14,6 +14,7 @@ class User(Resource):
     # method_decorators = [login_required]
     # TODO: decorate each route for each resource based on requirements (login_required, admin_required)
 
+    @login_required
     def get(self, user_id):
         timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received GET on user {user_id}')

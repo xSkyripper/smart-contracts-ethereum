@@ -93,9 +93,11 @@ class User(UserMixin, db.Model):
         seed()
         for i in range(count):
             u = User(
+                gov_id=fake.ssn(),
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.email(),
+                ethereum_id=fake.pystr(min_chars=40, max_chars=40),
                 password='password',
                 role=choice(roles),
                 **kwargs)

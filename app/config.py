@@ -22,7 +22,7 @@ if os.path.exists('config.env'):
 
 
 class Config(object):
-    FLASK_ENV =  os.getenv('FLASK_ENV', 'production')
+    FLASK_ENV =  None
     SECRET_KEY = os.getenv('FLASK_SECRET', 'Secret')
 
     APP_DIR = os.path.dirname(__file__)
@@ -32,8 +32,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
-    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'password')
-    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'flask-base-admin@example.com')
+    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@cryptotax.com')
 
     if not os.path.exists(DIST_DIR):
         raise Exception('DIST_DIR not found: {}'.format(DIST_DIR))
@@ -42,15 +42,19 @@ class Config(object):
     def init_app(app):
         pass
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
+    FLASK_ENV = os.getenv('FLASK_ENV', 'development')
     SQLALCHEMY_DATABASE_URI = os.getenv('DEV_DATABASE_URL',
                                         'sqlite:///' + os.path.join(Config.ROOT_DIR, 'data-dev.sqlite'))
     @classmethod
     def init_app(cls, app):
-        print('THIS APP IS IN DEBUG MODE. YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+        app.logger.info('THIS APP IS IN DEBUG MODE. YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+
 
 class ProductionConfig(Config):
+    FLASK_ENV = os.getenv('FLASK_ENV', 'production')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
                                         'sqlite:///' + os.path.join(Config.ROOT_DIR, 'data.sqlite'))
     SSL_DISABLE = os.getenv('SSL_DISABLE', 'True') == 'True'
@@ -59,6 +63,7 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         Config.init_app(app)
         assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
+
 
 class UnixConfig(ProductionConfig):
     @classmethod
@@ -71,6 +76,7 @@ class UnixConfig(ProductionConfig):
         syslog_handler = SysLogHandler()
         syslog_handler.setLevel(logging.WARNING)
         app.logger.addHandler(syslog_handler)
+
 
 config = {
     'development': DevelopmentConfig,

@@ -99,6 +99,10 @@ export default {
 
 <style lang="scss" scoped>
 .contracts {
+  h1 {
+    margin-bottom:30px;
+  }
+
   margin-top:30px;
 }
 </style>

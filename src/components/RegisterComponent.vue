@@ -38,6 +38,17 @@
             </div>
 
             <div class="mb-3">
+              <label for="username">Password</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">🗝</span>
+                </div>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <div class="invalid-feedback" style="width: 100%;">Your password is required.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
               <label for="email">Email
                 <span class="text-muted">(Optional)</span>
               </label>
