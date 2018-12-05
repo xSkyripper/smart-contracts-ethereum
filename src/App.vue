@@ -4,8 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/register">Register</router-link> |
-      <router-link to="/contracts">Contracts</router-link> |
-      <router-link to="/api">API Sample</router-link>
+      <router-link to="/contracts">Contracts</router-link>
     </div>
     <router-view/>
 
@@ -13,20 +12,29 @@
 </template>
 
 <style lang="scss">
+
+html,body{
+background-image: url('./assets/544750.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+height: 100%;
+font-family: 'Numans', sans-serif;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
 }
 #nav {
   padding: 30px;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: white;
     &.router-link-exact-active {
-      color: #42b983;
+      color: #ffc312;
     }
   }
 }
