@@ -17,6 +17,7 @@ def create_app(config_name):
 
     config_cls = config[config_name]
     app.config.from_object(config_cls)
+    app.url_map.strict_slashes = False
     
     # Modules init goes here
     config_cls.init_app(app)
