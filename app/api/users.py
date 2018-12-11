@@ -57,6 +57,10 @@ class User(Resource):
         # Get user object from the users (UserModel) table
         user = UserModel.query.get(user_id)
         
+        # Stop if the user does not exist
+        if not user:
+            return dict(error=f"There is no user with Id {user_id}"), 404
+        
         # Update User data, if present in the request
         if gov_id and len(gov_id) > 0:
             user.gov_id = gov_id
@@ -97,7 +101,17 @@ class User(Resource):
     def delete(self, user_id):
         timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received DELETE on user {user_id}')
-        # db.session.delete()
+        
+        # Get user with specified id
+        user = UserModel.query.get(user_id)
+        
+        # Stop if the user does not exist
+        if not user:
+            return dict(error=f"There is no user with Id {user_id}"), 404
+        
+        # Delete user
+        db.session.delete(user)
+
         return {
             'message': f'Called DELETE user {user_id}',
             'timestamp': timestamp,
