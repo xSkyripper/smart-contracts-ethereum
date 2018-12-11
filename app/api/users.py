@@ -44,16 +44,6 @@ class User(Resource):
         # Get user json object from the request
         user_data_dict = request.form
 
-        # Extract data from the request
-        gov_id = user_data_dict['gov_id']
-        first_name = user_data_dict['first_name']
-        last_name = user_data_dict['last_name']
-        email = user_data_dict['email']
-        ethereum_id = user_data_dict['ethereum_id']
-        password_hash = user_data_dict['password_hash']
-        role_id = user_data_dict['role_id']
-        contracts = user_data_dict['contracts']
-        
         # Get user object from the users (UserModel) table
         user = UserModel.query.get(user_id)
         
@@ -62,21 +52,21 @@ class User(Resource):
             return dict(error=f"There is no user with Id {user_id}"), 404
         
         # Update User data, if present in the request
-        if gov_id and len(gov_id) > 0:
+        if request.form.get('gov_id'):
             user.gov_id = gov_id
-        if first_name and len(first_name) > 0:
+        if request.form.get('first_name'):
             user.first_name = first_name
-        if last_name and len(last_name) > 0:
+        if request.form.get('last_name'):
             user.last_name = last_name
-        if email and len(email) > 0:
+        if request.form.get('email'):
             user.email = email
-        if ethereum_id and len(ethereum_id) > 0:
+        if request.form.get('ethereum_id'):
             user.ethereum_id = ethereum_id
-        if password_hash and len(password_hash) > 0:
-            user.password_hash = etherepassword_hashum_id
-        if contracts and len(contracts) > 0:
+        if request.form.get('password_hash'):
+            user.password_hash = password_hash
+        if request.form.get('contracts'):
             user.contracts = contracts
-        if role_id and len(role_id) > 0:
+        if request.form.get('role_id'):
             user.role_id = role_id
 
         current_app.logger.info(f'Trying to add user: {user}')
