@@ -70,7 +70,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* Made with love by Mutiullah Samim*/
 
 @import url("https://fonts.googleapis.com/css?family=Numans");
 

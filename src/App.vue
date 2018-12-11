@@ -4,7 +4,9 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/login">Login</router-link> |
       <router-link to="/register">Register</router-link> |
-      <router-link to="/contracts">Contracts</router-link>
+      <router-link to="/contracts">Contracts</router-link> |
+      <router-link to="/contracts/admin">Contracts (Admin)</router-link> |
+      <router-link to="/contracts/new">New Contract (Admin)</router-link>
     </div>
     <router-view/>
 
@@ -14,7 +16,8 @@
 <style lang="scss">
 
 html,body{
-background-image: url('./assets/544750.jpg');
+//background-image: url('./assets/544750.jpg');
+background-image: url('./assets/eth4.jpg');
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;

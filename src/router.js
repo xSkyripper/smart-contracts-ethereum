@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Contracts from './views/Contracts.vue'
+import NewContract from './views/NewContract.vue'
 import Api from './views/Api.vue'
 
 Vue.use(Router)
@@ -48,6 +49,24 @@ export default new Router({
       component: Contracts,
       meta: {
         title: 'Contracts'
+      }
+    },
+    {
+      path: '/contracts/admin',
+      name: 'admin_contracts',
+      component: Contracts,
+      meta: {
+        title: 'Contracts',
+        admin: true
+      }
+    },
+    {
+      path: '/contracts/new',
+      name: 'new_contract',
+      component: NewContract,
+      meta: {
+        title: 'Create Contract',
+        admin: true
       }
     }
   ]

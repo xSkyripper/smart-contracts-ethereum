@@ -3,74 +3,53 @@
     <div class="d-flex justify-content-center h-100">
       <div class="card">
         <div class="card-header">
-          <h3>Register</h3>
+          <h3>{{ msg }}</h3>
         </div>
         <div class="card-body">
           <form class="needs-validation" novalidate>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder value required>
-                <div class="invalid-feedback">Valid first name is required.</div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder value required>
-                <div class="invalid-feedback">Valid last name is required.</div>
-              </div>
-            </div>
-
             <div class="mb-3">
-              <label for="username">Username</label>
+              <label for="username">Company Name</label>
               <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">@</span>
-                </div>
                 <input
                   type="text"
                   class="form-control"
                   id="username"
-                  placeholder="Username"
+                  placeholder="Fictional Company Name"
                   required
+                  disabled
                 >
                 <div class="invalid-feedback" style="width: 100%;">Your username is required.</div>
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Password</label>
+              <label for="username">Service</label>
               <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">🗝</span>
-                </div>
                 <input type="password" class="form-control" id="password" placeholder="Password" required>
                 <div class="invalid-feedback" style="width: 100%;">Your password is required.</div>
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="email">Email
+              <label for="email">Description
                 <span class="text-muted">(Optional)</span>
               </label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
+              <input type="text" class="form-control" id="description" placeholder="">
               <div class="invalid-feedback">Please enter a valid email address for shipping updates.</div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Ethereum Wallet ID</label>
+              <label for="username">Amount Due</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="walletId" placeholder="0x...." required>
-                <div class="invalid-feedback" style="width: 100%;">Your Wallet ID is required.</div>
+                <input type="number" step=".01" class="form-control" id="walletId" required>
+                <div class="invalid-feedback" style="width: 100%;">Amount due is required</div>
               </div>
             </div>
 
-            <button class="btn float-right login_btn" type="submit">Register</button>
+            <button class="btn float-right login_btn" type="submit">Create contract</button>
           </form>
         </div>
         <div class="card-footer">
-          <div class="d-flex justify-content-center links">Already have an account?
-            <router-link to="/login">Login</router-link>
-          </div>
         </div>
       </div>
     </div>
@@ -79,7 +58,7 @@
 
 <script>
 export default {
-  name: 'RegisterComponent',
+  name: 'CreateContractComponent',
   props: {
     msg: String
   },
@@ -107,10 +86,10 @@ export default {
 }
 
 .card {
-  height: 670px;
+  height: 570px;
   margin-top: auto;
   margin-bottom: auto;
-  width: 35%;
+  width: 40%;
   background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
@@ -165,7 +144,7 @@ input:focus {
 .login_btn {
   color: black;
   background-color: #ffc312;
-  width: 100px;
+  width: 150px;
 }
 
 .login_btn:hover {

@@ -10,6 +10,7 @@
         :due_date="r.due_date"
         :service="r.service"
         :location="r.location"
+        :admin=$route.meta.admin
       />
     </div>
   </div>
