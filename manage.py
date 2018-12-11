@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 
 from app import create_app, db
-from app.models import Role, User
+from app.models import Role, User, Contract
 from app.config import Config
 
 app = create_app(os.getenv('FLASK_CONFIG', 'development'))
@@ -38,15 +38,15 @@ def recreate_db():
 
 
 @manager.option(
-    '-n',
-    '--number-users',
-    default=10,
-    type=int,
-    help='Number of each model type to create',
-    dest='number_users')
-def add_fake_data(number_users):
+    '-n', '--number-users', default=10, type=int,
+    help='Number of each model type to create', dest='number_users')
+@manager.option(
+    '-c', '--number-contracts', default=10, type=int,
+    help='Number of each model type to create', dest='number_contracts')
+def add_fake_data(number_users, number_contracts):
     """Adds fake data to the database."""
     User.generate_fake(count=number_users)
+    Contract.generate_fake(count=number_contracts)
 
 
 @manager.command

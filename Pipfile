@@ -18,6 +18,7 @@ flask-script = "*"
 flask-sslify = "*"
 flask-migrate = "*"
 faker = "*"
+ipython = "*"
 
 [dev-packages]
 pytest = "*"
