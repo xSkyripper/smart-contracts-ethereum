@@ -107,6 +107,15 @@ class User(UserMixin, db.Model):
             except IntegrityError:
                 db.session.rollback()
 
+    def to_dict(self):
+        return dict(
+            id=self.id,
+            gov_id=self.gov_id,
+            first_name=self.first_name,
+            last_name=self.last_name,
+            email=self.email,
+            ethereum_id=self.ethereum_id)
+
     def __repr__(self):
         return '<User \'%s\'>' % self.full_name()
 
