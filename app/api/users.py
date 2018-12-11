@@ -53,23 +53,21 @@ class User(Resource):
         
         # Update User data, if present in the request
         if request.form.get('gov_id'):
-            user.gov_id = gov_id
+            user.gov_id = request.form.get('gov_id')
         if request.form.get('first_name'):
-            user.first_name = first_name
+            user.first_name = request.form.get('first_name')
         if request.form.get('last_name'):
-            user.last_name = last_name
+            user.last_name = request.form.get('last_name')
         if request.form.get('email'):
-            user.email = email
+            user.email = request.form.get('email')
         if request.form.get('ethereum_id'):
-            user.ethereum_id = ethereum_id
+            user.ethereum_id = request.form.get('ethereum_id')
         if request.form.get('password_hash'):
-            user.password_hash = password_hash
+            user.password_hash = request.form.get('password_hash')
         if request.form.get('contracts'):
-            user.contracts = contracts
+            user.contracts = request.form.get('contracts')
         if request.form.get('role_id'):
-            user.role_id = role_id
-
-        current_app.logger.info(f'Trying to add user: {user}')
+            user.role_id = request.form.get('role_id')
 
         try:
             db.session.commit()
@@ -78,9 +76,9 @@ class User(Resource):
             db.session.rollback()
 
         if success:
-            message = f'Successfully added user to the database. User: {user}'
+            message = f'Successfully updated user data. User: {user}'
         else:
-            message = f'Failed to add user to the database. User: {user}'
+            message = f'Failed to update user data. User: {user}'
         
         return {
             'message': message,
@@ -112,6 +110,9 @@ class UserList(Resource):
     def get(self):
         timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received GET on users')
+
+        users = UserModel.query.all()
+        return dict(users=[user.to_dict() for user in users])
         return {
             'message': f'Called GET user list',
             'timestamp': timestamp,
@@ -119,8 +120,43 @@ class UserList(Resource):
 
     def post(self):
         timestamp = datetime.utcnow().isoformat()
+        success = False
         current_app.logger.info(f'Received POST on users')
+
+        # Create a user row
+        user = UserModel()
+        
+        
+        # Populate user row with data
+        if request.form.get('gov_id'):
+            user.gov_id = request.form.get('gov_id')
+        if request.form.get('first_name'):
+            user.first_name = request.form.get('first_name')
+        if request.form.get('last_name'):
+            user.last_name = request.form.get('last_name')
+        if request.form.get('email'):
+            user.email = request.form.get('email')
+        if request.form.get('ethereum_id'):
+            user.ethereum_id = request.form.get('ethereum_id')
+        if request.form.get('password_hash'):
+            user.password_hash = request.form.get('password_hash')
+        if request.form.get('contracts'):
+            user.contracts = request.form.get('contracts')
+        if request.form.get('role_id'):
+            user.role_id = request.form.get('role_id')
+
+        try:
+            db.session.commit()
+            success = True
+        except IntegrityError:
+            db.session.rollback()
+
+        if success:
+            message = f'Successfully added user to the database. User: {user}'
+        else:
+            message = f'Failed to add user to the database. User: {user}'   
+
         return {
-            'message': f'Called POST user list',
+            'message': message,
             'timestamp': timestamp,
             }, 201
