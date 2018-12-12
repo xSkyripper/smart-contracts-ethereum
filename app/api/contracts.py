@@ -9,6 +9,7 @@ from app.decorators import admin_required
 from app.api.security import require_auth
 from app.api import api_rest
 from pprint import pprint
+from sqlalchemy import exc
 
 
 @api_rest.route('/contracts/<int:contract_id>')
@@ -26,7 +27,6 @@ class Contract(Resource):
     # @login_required
     def put(self, contract_id):
         current_app.logger.info(f'Received PUT on contract {contract_id}')
-        success = False
 
         contract = ContractModel.query.get(contract_id)
 
@@ -47,10 +47,10 @@ class Contract(Resource):
 
         try:
             db.session.commit()
-        except IntegrityError as e: 
+        except exc.IntegrityError as e: 
             current_app.logger.error(e)
             db.session.rollback()
-            return dict(error=f'There was an error updating the contract with Id {contract_id}:{e.message}'), 400
+            return dict(error=f'There was an error updating the contract with Id {contract_id}:{e.orig}'), 400
         
         return dict(etag=contract_id, contract=contract.to_dict()), 204
 
@@ -94,9 +94,9 @@ class ContractList(Resource):
         try:
             db.session.add(contract)
             db.session.commit()
-        except IntegrityErrror as e:
+        except exc.IntegrityError as e:
             current_app.logger.error(e)
             db.session.rollback()
-            return dict(error=f'There was an error creating the contract:{e.message}'), 400
+            return dict(error=f'There was an error creating the contract:{e.orig}'), 400
 
         return dict(contract=contract.to_dict()), 201

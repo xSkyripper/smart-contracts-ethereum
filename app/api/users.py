@@ -8,6 +8,8 @@ from app.decorators import admin_required
 from app.api.security import require_auth
 from app.api import api_rest
 from app import db
+from sqlalchemy import exc
+
 
 ns = api_rest.namespace('users', description='Users RESTful API')
 
@@ -18,7 +20,6 @@ class User(Resource):
 
     # @login_required
     def get(self, user_id):
-        timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received GET on user {user_id}')
 
         user = UserModel.query.get(user_id)
@@ -26,20 +27,11 @@ class User(Resource):
         if not user:
             return dict(error=f"There is no user with Id {user_id}"), 404
 
-        return dict(
-            user=dict(
-                id=user.id,
-                gov_id=user.gov_id,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                email=user.email,
-                ethereum_id=user.ethereum_id)), 200
+        return dict(user=user.to_dict()), 200
 
     # @login_required
     def put(self, user_id):
-        timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received PUT on user {user_id}')
-        success = False
 
         # Get user json object from the request
         user_data_dict = request.form
@@ -71,23 +63,15 @@ class User(Resource):
 
         try:
             db.session.commit()
-            success = True
-        except IntegrityError:
+        except exc.IntegrityError as e:
+            current_app.logger.error(e)
             db.session.rollback()
+            return dict(error=f'There was an error updating the user with Id {user_id}:{e.orig}'), 400
 
-        if success:
-            message = f'Successfully updated user data. User: {user}'
-        else:
-            message = f'Failed to update user data. User: {user}'
-        
-        return {
-            'message': message,
-            'timestamp': timestamp,
-            }
+        return dict(etag=user_id, user=user.to_dict()), 204
 
     # @admin_required
     def delete(self, user_id):
-        timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received DELETE on user {user_id}')
         
         # Get user with specified id
@@ -100,63 +84,43 @@ class User(Resource):
         # Delete user
         db.session.delete(user)
 
-        return {
-            'message': f'Called DELETE user {user_id}',
-            'timestamp': timestamp,
-            }
+        return dict(), 204
+
 
 @ns.route('/')
 class UserList(Resource):
     def get(self):
-        timestamp = datetime.utcnow().isoformat()
         current_app.logger.info(f'Received GET on users')
 
         users = UserModel.query.all()
-        return dict(users=[user.to_dict() for user in users])
-        return {
-            'message': f'Called GET user list',
-            'timestamp': timestamp,
-            }
+
+        return dict(users=[user.to_dict() for user in users]), 200
 
     def post(self):
-        timestamp = datetime.utcnow().isoformat()
-        success = False
         current_app.logger.info(f'Received POST on users')
 
-        # Create a user row
-        user = UserModel()
-        
-        
-        # Populate user row with data
-        if request.form.get('gov_id'):
-            user.gov_id = request.form.get('gov_id')
-        if request.form.get('first_name'):
-            user.first_name = request.form.get('first_name')
-        if request.form.get('last_name'):
-            user.last_name = request.form.get('last_name')
-        if request.form.get('email'):
-            user.email = request.form.get('email')
-        if request.form.get('ethereum_id'):
-            user.ethereum_id = request.form.get('ethereum_id')
-        if request.form.get('password_hash'):
-            user.password_hash = request.form.get('password_hash')
-        if request.form.get('contracts'):
-            user.contracts = request.form.get('contracts')
-        if request.form.get('role_id'):
-            user.role_id = request.form.get('role_id')
+        gov_id = request.form.get('gov_id')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        email = request.form.get('email')
+        ethereum_id = request.form.get('ethereum_id')
+        password_hash = (request.form.get('password') or '') + 'hashed'
+        role_id = request.form.get('role_id')
+
+        user = UserModel(gov_id=gov_id,
+                         first_name=first_name,
+                         last_name=last_name,
+                         email=email,
+                         ethereum_id=ethereum_id,
+                         password_hash=password_hash,
+                         role_id=role_id)
 
         try:
+            db.session.add(user)
             db.session.commit()
-            success = True
-        except IntegrityError:
+        except exc.IntegrityError as e:
+            current_app.logger.error(e.orig)
             db.session.rollback()
+            return dict(error=f'There was an error creating the user:{e.orig}'), 400
 
-        if success:
-            message = f'Successfully added user to the database. User: {user}'
-        else:
-            message = f'Failed to add user to the database. User: {user}'   
-
-        return {
-            'message': message,
-            'timestamp': timestamp,
-            }, 201
+        return dict(user=user.to_dict()), 201
