@@ -8,38 +8,38 @@
         <div class="card-body">
           <form class="needs-validation" novalidate>
             <div class="mb-3">
-              <label for="username">Company Name</label>
+              <label for="company">Company Name</label>
               <div class="input-group">
                 <input
                   type="text"
                   class="form-control"
-                  id="username"
+                  id="company"
                   placeholder="Fictional Company Name"
                   required
                   disabled
                 >
-                <div class="invalid-feedback" style="width: 100%;">Your username is required.</div>
+                <div class="invalid-feedback" style="width: 100%;">Company name is required</div>
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Service</label>
+              <label for="service">Service</label>
               <div class="input-group">
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
-                <div class="invalid-feedback" style="width: 100%;">Your password is required.</div>
+                <input type="text" class="form-control" id="service" placeholder="Service" required>
+                <div class="invalid-feedback" style="width: 100%;">Service is required</div>
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="email">Description
+              <label for="description">Description
                 <span class="text-muted">(Optional)</span>
               </label>
-              <input type="text" class="form-control" id="description" placeholder="">
-              <div class="invalid-feedback">Please enter a valid email address for shipping updates.</div>
+              <input type="text" class="form-control" id="description" placeholder="Description">
+              <div class="invalid-feedback">Description is optional</div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Amount Due</label>
+              <label for="walletId">Amount Due</label>
               <div class="input-group">
                 <input type="number" step=".01" class="form-control" id="walletId" required>
                 <div class="invalid-feedback" style="width: 100%;">Amount due is required</div>

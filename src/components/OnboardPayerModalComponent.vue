@@ -10,7 +10,9 @@
         <header class="modal-header" id="modalTitle">
           <slot name="header">
             <h3 style="text-align: center">{{ name }} - {{ service }}</h3>
-            <button type="button" class="btn-close" @click="close" aria-label="Close modal">x</button>
+            <button type="button" class="btn-close" @click="close" aria-label="Close modal">
+              <i class="fa fa-times"></i>
+            </button>
           </slot>
         </header>
         <section class="modal-body" id="modalDescription">
@@ -37,7 +39,7 @@
           <slot name="footer">
             <button
               type="button"
-              class="btn-green"
+              class="btn btn-primary"
               @click="close"
               aria-label="Close modal"
             >Onboard!</button>
@@ -75,7 +77,7 @@ export default {
 .modal {
   // background-color: rgba(208, 191, 175, 1) !important;
   background-color: rgba(0, 0, 0, 1) !important;
-
+  border-radius: 4px;
   box-shadow: 2px 2px 20px 1px;
   overflow-x: auto;
   display: flex;
@@ -99,27 +101,33 @@ export default {
 
 .modal-footer {
   justify-content: flex-end;
+  padding: 1.2em 2em;
 }
 
 .modal-body {
   position: relative;
-  padding: 20px 10px;
+  padding: 2em;
 }
 
 .btn-close {
   border: none;
-  font-size: 10px;
-  padding: 10px;
+  font-size: 14px;
+  padding: 6px 8px;
   cursor: pointer;
   font-weight: bold;
   color: black;
   background: transparent;
   background-color: #ffc312;
+
+  i {
+    display: block;
+  }
 }
 
-.btn-green {
+.btn-primary {
   color: black;
   background-color: #ffc312;
+  border-color: #ffc312;
   width: 100px;
 }
 
