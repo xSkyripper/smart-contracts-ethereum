@@ -13,6 +13,10 @@ from sqlalchemy import exc
 
 ns = api_rest.namespace('users', description='Users RESTful API')
 
+@ns.route('/<int:user_id>/contracts')
+class UserContractsList(Resource):
+    pass
+
 @ns.route('/<int:user_id>')
 class User(Resource):
     # method_decorators = [login_required]
@@ -27,7 +31,7 @@ class User(Resource):
         if not user:
             return dict(error=f"There is no user with Id {user_id}"), 404
 
-        return dict(user=user.to_dict()), 200
+        return dict(user=user.to_dict(with_contracts=True)), 200
 
     # @login_required
     def put(self, user_id):

@@ -3,7 +3,7 @@ from flask_login import AnonymousUserMixin, UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db, login_manager
-from app.models.contract import user_contract_assoc, Contract
+# from app.models.contract import user_contract_assoc, Contract
 
 
 class Permission(object):
@@ -51,8 +51,7 @@ class User(UserMixin, db.Model):
     ethereum_id = db.Column(db.String(512), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    contracts = db.relationship('Contract', secondary=user_contract_assoc,
-                                lazy='subquery', backref=db.backref('users', lazy=True))
+
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -107,14 +106,19 @@ class User(UserMixin, db.Model):
             except IntegrityError:
                 db.session.rollback()
 
-    def to_dict(self):
+    def to_dict(self, with_contracts=False):
+        contracts = []
+        if with_contracts:
+            contracts = [contract.id for contract in self.contracts]
+
         return dict(
             id=self.id,
             gov_id=self.gov_id,
             first_name=self.first_name,
             last_name=self.last_name,
             email=self.email,
-            ethereum_id=self.ethereum_id)
+            ethereum_id=self.ethereum_id,
+            contracts=contracts)
 
     def __repr__(self):
         return '<User \'%s\'>' % self.full_name()
