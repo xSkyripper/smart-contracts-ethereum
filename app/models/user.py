@@ -137,5 +137,15 @@ login_manager.anonymous_user = AnonymousUser
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
+def __eq__(self, other):
+    """Overrides the default implementation"""
+    if isinstance(other, User):
+        return (self.id == other.id
+            and self.gov_id == other.gov_id,
+            and self.first_name == other.first_name,
+            and self.last_name == other.last_name,
+            and self.email == other.email,
+            and self.ethereum_id == other.ethereum_id,
+            and self.contracts == contracts)
+    return False
 
