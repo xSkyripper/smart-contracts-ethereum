@@ -63,8 +63,14 @@
                 <div class="invalid-feedback" style="width: 100%;">Your Wallet ID is required.</div>
               </div>
             </div>
-
-            <button class="btn float-right login_btn" type="submit">Register</button>
+            <div class="form-group">
+              <input
+                type="submit"
+                value="Register"
+                class="btn float-right login_btn"
+                @click.prevent="register"
+              >
+            </div>
           </form>
         </div>
         <div class="card-footer">
@@ -78,6 +84,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'RegisterComponent',
   props: {
@@ -91,7 +99,10 @@ export default {
   },
   methods: {
     register () {
-      alert('Register')
+      return axios.get('http://localhost:5000/register/')
+        .then(response => {
+          alert(response.data)
+        })
     }
   }
 }

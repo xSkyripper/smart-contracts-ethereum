@@ -48,8 +48,10 @@
     </div>
   </div>
 </template>
-
 <script>
+import axios from 'axios'
+import Vue from 'vue'
+
 export default {
   name: 'LoginComponent',
   props: {
@@ -57,13 +59,20 @@ export default {
   },
   data () {
     return {
-      resources: [],
+      id: '',
       error: ''
     }
   },
   methods: {
     login () {
-      alert('Login')
+      return axios.get('http://localhost:5000/login/')
+        .then(response => {
+          console.log(response.data.id)
+          Vue.prototype.$username = response.data.id
+          if (typeof response.data.id !== undefined) {
+            alert('Login successful')
+          }
+        })
     }
   }
 }

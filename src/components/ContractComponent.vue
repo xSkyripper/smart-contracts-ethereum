@@ -8,18 +8,13 @@
         <div class="panel-body">
           <img class="img-rounded img-center" :src="picture" data-holder-rendered="true">
           <span class="info-line">
-            <strong>Service</strong>:
-            <span class="service">{{ service }}</span>
+            <strong>Id</strong>:
+            <span class="service">{{ id }}</span>
           </span>
 
           <span class="info-line">
-            <strong>Due Date</strong>:
+            <strong>Amount</strong>:
             <span class="due_date">{{ due_date }}</span>
-          </span>
-
-          <span class="info-line">
-            <strong>Location</strong>:
-            <span class="location">{{ location }}</span>
           </span>
 
           <button v-if="admin" @click="showOnboardPayerModal" class="btn btn-default btn-pay" type="button" data-id="0">On-board payer</button>
@@ -44,10 +39,11 @@ export default {
     PayContractModalComponent
   },
   props: {
+    id: Number,
     name: String,
     picture: String,
     service: String,
-    due_date: String,
+    due_date: Number,
     location: String,
     admin: Boolean
   },

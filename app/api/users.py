@@ -15,7 +15,16 @@ ns = api_rest.namespace('users', description='Users RESTful API')
 
 @ns.route('/<int:user_id>/contracts')
 class UserContractsList(Resource):
-    pass
+    # TODO: HARDCODED
+    def get(self, user_id):
+        return dict(contracts=[{
+                "id": 1,
+                "tax": 69,
+                "type": "702-25-0008",
+                "description": "PWxjaFAPHmnmzqfHsSuhJHDfgQnGVeissiJeUyTjZVCPdtGrTMXbow",
+                "ethereum_addr": "VhtMtETeFvucWSenfGXrHVrkZnieUqXvTpqcAmsC",
+                "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",
+                "users": []}])
 
 @ns.route('/<int:user_id>')
 class User(Resource):
@@ -25,13 +34,10 @@ class User(Resource):
     # @login_required
     def get(self, user_id):
         current_app.logger.info(f'Received GET on user {user_id}')
-
         user = UserModel.query.get(user_id)
-
         if not user:
             return dict(error=f"There is no user with Id {user_id}"), 404
-
-        return dict(user=user.to_dict(with_contracts=True)), 200
+        return dict(user=user.to_dict()), 200
 
     # @login_required
     def put(self, user_id):

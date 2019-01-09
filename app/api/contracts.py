@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import request, current_app
 from flask_restplus import Resource
 from flask_login import current_user, login_required
+from flask import jsonify
+import json
 
 from app import db
 from app.models import Contract as ContractModel, User as UserModel
@@ -50,7 +52,8 @@ class Contract(Resource):
         if not contract:
             return dict(error=f"There is no contract with Id {contract_id}"), 404
         
-        return dict(contract=contract.to_dict(with_users=True)), 200
+        return dict(contract=contract.to_dict()), 200
+        # return dict(contracts=[{"id": 7, "name": "name1", "service": "service1"}]), 201
 
     # @login_required
     def put(self, contract_id):
@@ -110,10 +113,10 @@ class Contract(Resource):
 class ContractList(Resource):
     def get(self):
         current_app.logger.info(f'Received GET on contracts')
-
         contracts = ContractModel.query.all()
-
         return dict(contracts=[contract.to_dict() for contract in contracts]), 200
+        # return dict(contracts=[{"id": 7, "name": "name1", "service": "service1"},
+        #     {"id": 8, "name": "name1", "service": "service2"}]), 201
 
     def post(self):
         current_app.logger.info(f'Received POST on contracts')

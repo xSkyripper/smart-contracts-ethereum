@@ -5,18 +5,22 @@
       <ContractComponent
         v-for="r in resources"
         :key="r.id"
-        :name="r.name"
+        :id="r.id"
+        :name="r.description.slice(0,5)"
         :picture="r.picture"
-        :due_date="r.due_date"
+        :due_date="r.tax"
         :service="r.service"
-        :location="r.location"
+
         :admin=$route.meta.admin
       />
     </div>
   </div>
 </template>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
 <script>
+import axios from 'axios'
+import Vue from 'vue'
+
 import ContractComponent from '@/components/ContractComponent.vue'
 
 export default {
@@ -29,65 +33,20 @@ export default {
   },
   data () {
     return {
-      resources: [
-        {
-          id: 0,
-          name: 'E-On',
-          picture: require('../assets/e_on.jpg'),
-          due_date: '2018-12-03',
-          service: 'Electric Energy',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 1,
-          name: 'E-On',
-          picture: require('../assets/e_on.jpg'),
-          due_date: '2018-11-29',
-          service: 'Gas',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 2,
-          name: 'ANAF',
-          picture: require('../assets/anaf.jpg'),
-          due_date: '2018-12-05',
-          service: 'Car Tax',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 3,
-          name: 'City Hall',
-          picture: require('../assets/iasi.jpg'),
-          due_date: '2018-12-01',
-          service: 'Garbage Tax',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 4,
-          name: 'E-On',
-          picture: require('../assets/e_on.jpg'),
-          due_date: '2018-11-29',
-          service: 'Gas',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 5,
-          name: 'ANAF',
-          picture: require('../assets/anaf.jpg'),
-          due_date: '2018-12-05',
-          service: 'Car Tax',
-          location: 'Iasi, Iasi'
-        },
-        {
-          id: 6,
-          name: 'City Hall',
-          picture: require('../assets/iasi.jpg'),
-          due_date: '2018-12-01',
-          service: 'Garbage Tax',
-          location: 'Iasi, Iasi'
-        }
-      ],
+      resources: [],
       error: ''
+    }
+  },
+  mounted: function() {
+    console.log(this.$route.meta.admin)
+    if(this.$route.meta.admin) {
+      axios.get("http://localhost:5000/api/contracts")
+      .then(response => {
+        this.resources = response.data.contracts})
+    } else {
+      axios.get("http://localhost:5000/api/users/" + Vue.prototype.$username + "/contracts/")
+      .then(response => {
+        this.resources = response.data.contracts})
     }
   },
   methods: {

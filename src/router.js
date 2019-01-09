@@ -44,20 +44,21 @@ export default new Router({
       }
     },
     {
-      path: '/contracts',
-      name: 'contracts',
-      component: Contracts,
-      meta: {
-        title: 'Contracts'
-      }
-    },
-    {
       path: '/contracts/admin',
       name: 'admin_contracts',
       component: Contracts,
       meta: {
         title: 'Contracts',
         admin: true
+      }
+    },
+    {
+      path: '/contracts',
+      name: 'contracts',
+      component: Contracts,
+      meta: {
+        title: 'Contracts',
+        admin: false
       }
     },
     {

@@ -1,4 +1,7 @@
 import os
+from flask_cors import CORS
+import json
+
 from flask import (
     Blueprint,
     render_template,
@@ -20,6 +23,8 @@ main_bp = Blueprint('main_bp', __name__,
                     template_folder='./dist/',
                     )
 
+CORS(main_bp, resources={r"*": {"origins": "*"}})
+
 @main_bp.route('/')
 def index_client():
     dist_dir = current_app.config['DIST_DIR']
@@ -28,14 +33,14 @@ def index_client():
 
 @main_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    return json.dumps({"id": 1})
 
 @main_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    pass
+    return "register"
 
 @main_bp.route('/logout', methods=['GET', 'POST'])
 def logout():
-    pass
+    return "logout"
 
 
