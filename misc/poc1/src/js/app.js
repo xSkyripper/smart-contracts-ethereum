@@ -100,7 +100,6 @@ App = {
       App.contracts.Payment.deployed().then(function (instance) {
         paymentInstance = instance
         instance.getAmountDue.call().then(function (amountDue) {
-          alert(amountDue)
           return paymentInstance.pay(billId, {
             from: account,
             value: web3.toWei(amountDue, 'ether')
