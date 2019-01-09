@@ -1,6 +1,7 @@
 import os
 from flask_cors import CORS
 import json
+from app.test.test_User import run_tests
 
 from flask import (
     Blueprint,
@@ -60,4 +61,6 @@ def register():
 def logout():
     return "logout"
 
-
+@main_bp.route('/tests', methods=['GET'])
+def tests():
+    return str(run_tests())
