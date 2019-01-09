@@ -16,6 +16,6 @@ def add_header(response):
 
 
 # Import resources to ensure view is registered
-from app.api.resources import * # NOQA
+# from app.api.resources import * # NOQA
 from app.api.users import *
 from app.api.contracts import *

@@ -7,14 +7,15 @@ from flask import (
     render_template,
     current_app,
     send_file,
+    request,
+    jsonify,
     )
+from flask_jwt_extended import create_access_token
+from werkzeug.security import check_password_hash, generate_password_hash
 
-from flask_login import (
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-    )
+
+from app.models import User
+
 
 main_bp = Blueprint('main_bp', __name__,
                     url_prefix='',
@@ -33,7 +34,23 @@ def index_client():
 
 @main_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    return json.dumps({"id": 1})
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not email or not password:
+        return jsonify(dict(error=f"Invalid parameters")), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify(dict(error=f"Invalid email or password")), 401
+
+    if not check_password_hash(user.password_hash, password):
+        return jsonify(dict(error=f'Invalid email or password')), 401 
+
+    access_token = create_access_token(identity=user.id)
+
+    return jsonify(dict(access_token=access_token)), 200
 
 @main_bp.route('/register', methods=['GET', 'POST'])
 def register():

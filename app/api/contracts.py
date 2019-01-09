@@ -1,20 +1,19 @@
 from datetime import datetime
-from flask import request, current_app
+from pprint import pprint
+from flask import request, current_app, jsonify
 from flask_restplus import Resource
 from flask_login import current_user, login_required
-from flask import jsonify
-import json
+from sqlalchemy import exc
 
 from app import db
 from app.models import Contract as ContractModel, User as UserModel
-from app.decorators import admin_required
-from app.api.security import require_auth
 from app.api import api_rest
-from pprint import pprint
-from sqlalchemy import exc
+from app.security import admin_required, user_required
+
 
 @api_rest.route('/contracts/<int:contract_id>/users')
 class ContractUsersList(Resource):
+    @admin_required
     def post(self, contract_id):
         current_app.logger.info(f'Received POST on ContractUsers contract {contract_id}')
         contract = ContractModel.query.get(contract_id)
@@ -44,7 +43,7 @@ class ContractUsersList(Resource):
 
 @api_rest.route('/contracts/<int:contract_id>')
 class Contract(Resource):
-    # @login_required
+    @user_required
     def get(self, contract_id):
         current_app.logger.info(f'Received GET on contract {contract_id}')
         contract = ContractModel.query.get(contract_id)
@@ -55,7 +54,7 @@ class Contract(Resource):
         return dict(contract=contract.to_dict()), 200
         # return dict(contracts=[{"id": 7, "name": "name1", "service": "service1"}]), 201
 
-    # @login_required
+    @admin_required
     def put(self, contract_id):
         current_app.logger.info(f'Received PUT on contract {contract_id}')
 
@@ -96,7 +95,7 @@ class Contract(Resource):
         
         return dict(etag=contract_id, contract=contract.to_dict()), 200
 
-    # @login_required
+    @admin_required
     def delete(self, contract_id):
         current_app.logger.info(f'Received DELETE on contract {contract_id}')
 
@@ -111,6 +110,7 @@ class Contract(Resource):
 
 @api_rest.route('/contracts')
 class ContractList(Resource):
+    @admin_required
     def get(self):
         current_app.logger.info(f'Received GET on contracts')
         contracts = ContractModel.query.all()
@@ -118,6 +118,7 @@ class ContractList(Resource):
         # return dict(contracts=[{"id": 7, "name": "name1", "service": "service1"},
         #     {"id": 8, "name": "name1", "service": "service2"}]), 201
 
+    @admin_required
     def post(self):
         current_app.logger.info(f'Received POST on contracts')
 

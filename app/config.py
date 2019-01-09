@@ -31,6 +31,7 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt-secret-key')
 
     ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
     ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@cryptotax.com')

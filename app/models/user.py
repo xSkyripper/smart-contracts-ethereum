@@ -2,9 +2,7 @@ from flask import current_app
 from flask_login import AnonymousUserMixin, UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db, login_manager
-# from app.models.contract import user_contract_assoc, Contract
-
+from app import db
 
 class Permission(object):
     USER = 0x01
@@ -49,7 +47,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(64), index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     ethereum_id = db.Column(db.String(512), unique=True, index=True)
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(256))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
 
@@ -98,7 +96,7 @@ class User(UserMixin, db.Model):
                 email=fake.email(),
                 ethereum_id=fake.pystr(min_chars=40, max_chars=40),
                 password='password',
-                role=choice(roles),
+                role=roles[0],
                 **kwargs)
             db.session.add(u)
             try:
@@ -123,19 +121,6 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User \'%s\'>' % self.full_name()
 
-class AnonymousUser(AnonymousUserMixin):
-    def can(self, _):
-        return False
-
-    def is_admin(self):
-        return False
-
-
-login_manager.anonymous_user = AnonymousUser
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 def __eq__(self, other):
     """Overrides the default implementation"""

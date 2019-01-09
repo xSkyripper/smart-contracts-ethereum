@@ -1,19 +1,15 @@
 from datetime import datetime
 from flask import request, current_app
 from flask_restplus import Resource
-from flask_login import current_user, login_required
-
-from app.models import User as UserModel
-from app.decorators import admin_required
-from app.api.security import require_auth
-from app.api import api_rest
-from app import db
 from sqlalchemy import exc
 
+from app.models import User as UserModel
+from app.security import admin_required, user_required
+from app.api import api_rest
+from app import db
 
-ns = api_rest.namespace('users', description='Users RESTful API')
 
-@ns.route('/<int:user_id>/contracts')
+@api_rest.route('/users/<int:user_id>/contracts')
 class UserContractsList(Resource):
     # TODO: HARDCODED
     def get(self, user_id):
@@ -26,12 +22,10 @@ class UserContractsList(Resource):
                 "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",
                 "users": []}])
 
-@ns.route('/<int:user_id>')
-class User(Resource):
-    # method_decorators = [login_required]
-    # TODO: decorate each route for each resource based on requirements (login_required, admin_required)
 
-    # @login_required
+@api_rest.route('/users/<int:user_id>')
+class User(Resource):
+    @admin_required
     def get(self, user_id):
         current_app.logger.info(f'Received GET on user {user_id}')
         user = UserModel.query.get(user_id)
@@ -39,7 +33,7 @@ class User(Resource):
             return dict(error=f"There is no user with Id {user_id}"), 404
         return dict(user=user.to_dict()), 200
 
-    # @login_required
+    @user_required
     def put(self, user_id):
         current_app.logger.info(f'Received PUT on user {user_id}')
 
@@ -80,7 +74,7 @@ class User(Resource):
 
         return dict(etag=user_id, user=user.to_dict()), 204
 
-    # @admin_required
+    @admin_required
     def delete(self, user_id):
         current_app.logger.info(f'Received DELETE on user {user_id}')
         
@@ -97,8 +91,9 @@ class User(Resource):
         return dict(), 204
 
 
-@ns.route('/')
+@api_rest.route('/users')
 class UserList(Resource):
+    @user_required
     def get(self):
         current_app.logger.info(f'Received GET on users')
 
@@ -106,6 +101,7 @@ class UserList(Resource):
 
         return dict(users=[user.to_dict() for user in users]), 200
 
+    @admin_required
     def post(self):
         current_app.logger.info(f'Received POST on users')
 

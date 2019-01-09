@@ -1,16 +1,11 @@
 import os
 from flask import Flask, current_app, send_file
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-
+from flask_jwt_extended import JWTManager
 from app.config import config
 
 db = SQLAlchemy()
-
-login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.login_view = 'main_bp.login'
-
+jwt = JWTManager()
 
 def create_app(config_name):
     app = Flask(__name__, static_folder='../dist/static')
@@ -22,7 +17,10 @@ def create_app(config_name):
     # Modules init goes here
     config_cls.init_app(app)
     db.init_app(app)
-    login_manager.init_app(app)
+    jwt.init_app(app)
+    
+    from app.security import setup_security
+    setup_security()
 
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
         from flask_sslify import SSLify

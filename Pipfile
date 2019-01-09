@@ -19,6 +19,7 @@ flask-sslify = "*"
 flask-migrate = "*"
 faker = "*"
 ipython = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 pytest = "*"
