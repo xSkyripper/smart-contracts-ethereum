@@ -10,40 +10,23 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder value required>
+                <input  v-model="user.first_name"  type="text" class="form-control" id="firstName" placeholder value required>
                 <div class="invalid-feedback">Valid first name is required.</div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" id="lastName" placeholder value required>
+                <input v-model="user.last_name" type="text" class="form-control" id="lastName" placeholder value required>
                 <div class="invalid-feedback">Valid last name is required.</div>
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Username</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">@</span>
-                </div>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="username"
-                  placeholder="Username"
-                  required
-                >
-                <div class="invalid-feedback" style="width: 100%;">Your username is required.</div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="username">Password</label>
+              <label for="password">Password</label>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text">🗝</span>
                 </div>
-                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                <input v-model="user.password" type="password" class="form-control" id="password" placeholder="Password" required>
                 <div class="invalid-feedback" style="width: 100%;">Your password is required.</div>
               </div>
             </div>
@@ -52,17 +35,26 @@
               <label for="email">Email
                 <span class="text-muted">(Optional)</span>
               </label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
+              <input v-model="user.email" type="email" class="form-control" id="email" placeholder="you@example.com">
               <div class="invalid-feedback">Please enter a valid email address for shipping updates.</div>
             </div>
 
             <div class="mb-3">
-              <label for="username">Ethereum Wallet ID</label>
+              <label for="walletId">Ethereum Wallet ID</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="walletId" placeholder="0x...." required>
+                <input v-model="user.ethereum_id" type="text" class="form-control" id="walletId" placeholder="0x...." required>
                 <div class="invalid-feedback" style="width: 100%;">Your Wallet ID is required.</div>
               </div>
             </div>
+
+            <div class="mb-3">
+              <label for="govId">Gov ID</label>
+              <div class="input-group">
+                <input v-model="user.gov_id" type="text" class="form-control" id="govId" placeholder="0x...." required>
+                <div class="invalid-feedback" style="width: 100%;">Your Wallet ID is required.</div>
+              </div>
+            </div>
+
             <div class="form-group">
               <input
                 type="submit"
@@ -85,6 +77,7 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
 
 export default {
   name: 'RegisterComponent',
@@ -93,15 +86,27 @@ export default {
   },
   data () {
     return {
-      resources: [],
-      error: ''
+      user: {
+        first_name: '',
+        last_name: '',
+        password: '',
+        email: '',
+        ethereum_id: '',
+        gov_id: ''
+      }
     }
   },
   methods: {
     register () {
-      return axios.get('http://localhost:5000/register/')
+      const config = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+
+      return axios.post('http://localhost:5000/register', qs.stringify(this.user), config)
         .then(response => {
-          alert(response.data)
+          console.log(response)
         })
     }
   }

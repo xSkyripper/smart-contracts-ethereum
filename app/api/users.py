@@ -104,7 +104,7 @@ class UserList(Resource):
     @admin_required
     def post(self):
         current_app.logger.info(f'Received POST on users')
-
+        
         gov_id = request.form.get('gov_id')
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
