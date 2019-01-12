@@ -20,6 +20,8 @@ flask-migrate = "*"
 faker = "*"
 ipython = "*"
 flask-jwt-extended = "*"
+easysolc = "*"
+web3 = "*"
 
 [dev-packages]
 pytest = "*"

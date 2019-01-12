@@ -1,14 +1,16 @@
 pragma solidity ^0.4.24;
 
 contract Payment {
-    struct Payer {
-        address addr;
-        bool payed;  
+    struct PayerData {
+        bool payed;
+        bool exists;
     }
     
     address owner;
     uint amountDue;
-    Payer[] payers;
+    
+    address[] payersList;
+    mapping (address => PayerData) payers;
 
     constructor(uint _amountDue) public {
         amountDue = _amountDue;
@@ -26,37 +28,56 @@ contract Payment {
 
 
     function addPayer(address _payerAddr) public onlyOwner {
-        for (uint payerIdx = 0; payerIdx < payers.length; payerIdx++) {
-            require(!(payers[payerIdx].addr == _payerAddr), "Already added!");
-        }
+        require(payers[_payerAddr].exists == false, "Payer already exists!");
 
-        Payer memory payer = Payer({
-            addr: _payerAddr,
-            payed: false
-            });
-        
-        payers.push(payer);
+        PayerData memory newPayerData = PayerData({
+            payed: false,
+            exists: true
+        });
+
+        payers[_payerAddr] = newPayerData;
+        payersList.push(_payerAddr);
     }
 
-    function getPayers() public view onlyOwner returns (address[] memory) {
-        address[] memory payersAddresses;
-        return payersAddresses;
+    function getPayers() public view returns (address[] memory) {
+        return payersList;
     }
 
+    function removePayer(address _payerAddr) public onlyOwner {
+        require(payers[_payerAddr].exists == true, "Payer doesn't exist!");
 
-    function pay(uint billId) public payable returns (uint) {
-        for (uint payerIdx = 0; payerIdx < payers.length; payerIdx++) {
-            if (payers[payerIdx].addr == msg.sender) {
-                require(!payers[payerIdx].payed, "Already payed!");
-                payers[payerIdx].payed = true;
+        delete payers[_payerAddr];
+
+        uint indexToDelete;
+        for (uint payerIdx = 0; payerIdx < payersList.length; payerIdx++) {
+            if (payersList[payerIdx] == _payerAddr) {
+                indexToDelete = payerIdx;
+                break;
             }
         }
 
-        return billId;
+        if (payersList.length > 1) {
+            payersList[indexToDelete] = payersList[payersList.length - 1];
+        }
+        payersList.length--;
     }
-	
+
+    function pay() public payable returns (uint) {
+        require(payers[msg.sender].exists, "The payer is not in this contract!");
+        require(!payers[msg.sender].payed, "The payer has already payed!");
+        require(msg.value == amountDue, "Incorrect amount payed!");
+
+        payers[msg.sender].payed = true;
+    }
+
     function getAmountDue() public view returns (uint) {
         return amountDue;
+    }
+
+    function checkPaymentStatus(address _payerAddr) public view returns (bool) {
+        require(msg.sender == _payerAddr || msg.sender == owner, "You cannot check someone else's payment status");
+
+        return payers[_payerAddr].payed;
     }
 
     function getContractBalance() public onlyOwner returns (uint){
