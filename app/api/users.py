@@ -15,8 +15,8 @@ class UserContractsList(Resource):
     def get(self, user_id):
         return dict(contracts=[{
                 "id": 1,
-                "tax": 69,
-                "type": "702-25-0008",
+                "amount_due": 69,
+                "name": "Test1Contract",
                 "description": "PWxjaFAPHmnmzqfHsSuhJHDfgQnGVeissiJeUyTjZVCPdtGrTMXbow",
                 "ethereum_addr": "VhtMtETeFvucWSenfGXrHVrkZnieUqXvTpqcAmsC",
                 "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",

@@ -10,11 +10,10 @@ class Contract(db.Model):
     __tablename__ = 'contracts'
 
     id = db.Column(db.Integer, primary_key=True)
-    tax = db.Column(db.Integer, index=True)
-    type = db.Column(db.String(15), index=True)
+    amount_due = db.Column(db.Integer, index=True)
+    name = db.Column(db.String(64), index=True)
     description = db.Column(db.String(512), index=True)
     ethereum_addr = db.Column(db.String(512), unique=True, index=True)
-    abi = db.Column(db.BLOB)
     users = db.relationship('User', secondary=user_contract_assoc,
                             lazy='subquery', backref=db.backref('contracts', lazy=True))
 
@@ -30,11 +29,11 @@ class Contract(db.Model):
         seed()
         for i in range(count):
             c = Contract(
-                tax=randint(1, 100),
+                amount_due=randint(1, 100),
+                name=fakse.first_name(),
                 type=fake.ssn(),
                 description=fake.pystr(min_chars=40, max_chars=80),
                 ethereum_addr=fake.pystr(min_chars=40, max_chars=40),
-                abi=bytes(fake.pystr(min_chars=80, max_chars=120), 'UTF-8'),
                 **kwargs)
             db.session.add(c)
             try:
@@ -49,11 +48,10 @@ class Contract(db.Model):
 
         return dict(
             id=self.id,
-            tax=self.tax,
-            type=self.type,
+            amount_due=self.amount_due,
+            name=self.name,
             description=self.description,
             ethereum_addr=self.ethereum_addr,
-            abi=self.abi.decode('UTF-8'),
             users=users)
 
     def __repr__(self):

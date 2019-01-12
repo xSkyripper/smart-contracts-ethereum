@@ -63,11 +63,11 @@ class Contract(Resource):
         if not contract:
             return dict(error=f"There is no contract with Id {contract_id}"), 404
 
-        if request.form.get('type'):
-            contract.type = request.form.get('type')
+        if request.form.get('name'):
+            contract.name = request.form.get('name')
         
-        if request.form.get('tax'):
-            contract.tax = request.form.get('tax')
+        if request.form.get('amount_due'):
+            contract.amount_due = request.form.get('amount_due')
 
         if request.form.get('description'):
             contract.description = request.form.get('description')
@@ -122,18 +122,17 @@ class ContractList(Resource):
     def post(self):
         current_app.logger.info(f'Received POST on contracts')
 
-        tax = request.form.get('tax')
-        contract_type = request.form.get('type')
+        amount_due = request.form.get('amount_due')
+        contract_name = request.form.get('name')
         description = request.form.get('description')
 
-        # TODO: create the contract in Ethereum
+        # TODO: integrate with smart_contract.py
         ethereum_addr = 'some eth addr'
         abi = 'some contract abi'
 
-        contract = ContractModel(tax=tax,
-                                 type=contract_type,
+        contract = ContractModel(amount_due=amount_due,
+                                 name=contract_name,
                                  description=description,
-                                 abi=abi,
                                  ethereum_addr=ethereum_addr)
 
         try:
