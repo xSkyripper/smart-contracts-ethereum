@@ -1,54 +1,65 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.24;
 
 contract Payment {
-	
-	struct Payer {
-	    address addr;
-        bool payed;  // if true, that person already voted
+    struct Payer {
+        address addr;
+        bool payed;  
     }
     
-    Payer[] payers;
+    address owner;
     uint amountDue;
+    Payer[] payers;
 
-    constructor() public {
-        amountDue = 5;
-    	payers.push(Payer({
-    	addr: 0x6D4E5BAc0fc3fF8dF7A713DC0bB47cEF310a92cB,
-    	payed: false
-    	}));
-    	payers.push(Payer({
-    	addr: 0xeec7A4E837eEB5242E9d20976286a0cCD464EFb5,
-    	payed: false
-    	}));
-    	payers.push(Payer({
-    	addr: 0xe603AFeC589146C9A03786255b9386462EaeD9e5,
-    	payed: true
-    	}));
-
+    constructor(uint _amountDue) public {
+        amountDue = _amountDue;
+        owner = msg.sender;
     }
 
-	// Paying a bill
-	function pay(uint billId) public payable returns (uint) {
-	  for (uint p = 0; p < payers.length; p++) {
-            if (payers[p].addr == msg.sender) {
-      			require(!payers[p].payed, "Already payed!");
-      			payers[p].payed = true;
+    modifier onlyOwner  {
+        require(msg.sender == owner, "Only owner can call this function.");
+        _;
+    }
+
+    function close() public onlyOwner {
+        selfdestruct(owner);
+    }
+
+
+    function addPayer(address _payerAddr) public onlyOwner {
+        for (uint payerIdx = 0; payerIdx < payers.length; payerIdx++) {
+            require(!(payers[payerIdx].addr == _payerAddr), "Already added!");
+        }
+
+        Payer memory payer = Payer({
+            addr: _payerAddr,
+            payed: false
+            });
+        
+        payers.push(payer);
+    }
+
+    function getPayers() public view onlyOwner returns (address[] memory) {
+        address[] memory payersAddresses;
+        return payersAddresses;
+    }
+
+
+    function pay(uint billId) public payable returns (uint) {
+        for (uint payerIdx = 0; payerIdx < payers.length; payerIdx++) {
+            if (payers[payerIdx].addr == msg.sender) {
+                require(!payers[payerIdx].payed, "Already payed!");
+                payers[payerIdx].payed = true;
             }
         }
 
-	  return billId;
-	}
+        return billId;
+    }
 	
-	function getAmountDue() returns (uint){
-		return amountDue;
-	}
+    function getAmountDue() public view returns (uint) {
+        return amountDue;
+    }
 
-	// Retrieving the payers
-	function getPayers() public view returns (address[]) {
-	  address[] payers_addresses;
-	  return payers_addresses;
-	}
-	function getContractBalance() public returns (uint){
-	  return this.balance;
-	}
+    function getContractBalance() public onlyOwner returns (uint){
+        return address(this).balance;
+    }
 }
