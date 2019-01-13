@@ -46,7 +46,7 @@ class Config(object):
         payment=dict(name='Payment', filename='Payment.sol'),
     )
 
-     if not ETH_CONTRACT_OWNER or ETH_CONTRACT_OWNER == '':
+    if not ETH_CONTRACT_OWNER or ETH_CONTRACT_OWNER == '':
         raise Exception("""ETH_CONTRACT_OWNER not set in env;\n
         Solution 1: Create a "config.env" file in project's root and add a line like "ETH_CONTRACT_OWNER=0xA6115D445B2D3DD2EBF9e7daEC2A135b4F750d02" (replace addr, no quotes)\n
         Solution 2: "export ETH_CONTRACT_OWNER=...""")
