@@ -41,7 +41,7 @@ def recreate_db():
     '-n', '--number-users', default=10, type=int,
     help='Number of each model type to create', dest='number_users')
 @manager.option(
-    '-c', '--number-contracts', default=10, type=int,
+    '-c', '--number-contracts', default=5, type=int,
     help='Number of each model type to create', dest='number_contracts')
 def add_fake_data(number_users, number_contracts):
     """Adds fake data to the database."""

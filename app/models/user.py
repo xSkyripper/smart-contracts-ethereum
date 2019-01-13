@@ -41,6 +41,7 @@ class Role(db.Model):
 class User(UserMixin, db.Model):
     __table_args__ = dict(sqlite_autoincrement=True)
     __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     gov_id = db.Column(db.String(16), unique=True, index=True)
     first_name = db.Column(db.String(64), index=True)
@@ -49,7 +50,6 @@ class User(UserMixin, db.Model):
     ethereum_id = db.Column(db.String(512), unique=True, index=True)
     password_hash = db.Column(db.String(256))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -78,7 +78,7 @@ class User(UserMixin, db.Model):
         self.password_hash = generate_password_hash(password)
 
     @staticmethod
-    def generate_fake(count=100, **kwargs):
+    def generate_fake(count=10, **kwargs):
         """Generate a number of fake users for testing."""
         from sqlalchemy.exc import IntegrityError
         from random import seed, choice

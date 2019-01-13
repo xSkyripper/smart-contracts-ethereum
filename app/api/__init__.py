@@ -19,3 +19,4 @@ def add_header(response):
 # from app.api.resources import * # NOQA
 from app.api.users import *
 from app.api.contracts import *
+from app.api.main import *

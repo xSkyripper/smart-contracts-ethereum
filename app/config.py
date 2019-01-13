@@ -23,7 +23,7 @@ if os.path.exists('config.env'):
 
 class Config(object):
     FLASK_ENV =  None
-    SECRET_KEY = os.getenv('FLASK_SECRET', 'Secret')
+    SECRET_KEY = os.getenv('FLASK_SECRET', 'flask-secret')
 
     APP_DIR = os.path.dirname(__file__)
     ROOT_DIR = os.path.dirname(APP_DIR)
@@ -36,8 +36,32 @@ class Config(object):
     ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
     ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@cryptotax.com')
 
+    ETHEREUM_PROVIDER = os.getenv('ETH_PROVIDER', 'http')
+    ETHEREUM_ENDPOINT_URI = os.getenv('ETH_NET_ADDR', 'http://127.0.0.1:7545')
+    
+    ETH_CONTRACT_OWNER = os.getenv('ETH_CONTRACT_OWNER')
+    ETH_CONTRACTS_DIR = os.getenv('ETH_CONTRACTS_DIR',
+                                  os.path.join(ROOT_DIR, 'etc/contracts'))
+    ETH_CONTRACTS = dict(
+        payment=dict(name='Payment', filename='Payment.sol'),
+    )
+
+     if not ETH_CONTRACT_OWNER or ETH_CONTRACT_OWNER == '':
+        raise Exception("""ETH_CONTRACT_OWNER not set in env;\n
+        Solution 1: Create a "config.env" file in project's root and add a line like "ETH_CONTRACT_OWNER=0xA6115D445B2D3DD2EBF9e7daEC2A135b4F750d02" (replace addr, no quotes)\n
+        Solution 2: "export ETH_CONTRACT_OWNER=...""")
+
     if not os.path.exists(DIST_DIR):
         raise Exception('DIST_DIR not found: {}'.format(DIST_DIR))
+
+    if not os.path.exists(ETH_CONTRACTS_DIR):
+        raise Exception('ETH_CONTRACTS_DIR not found: {}'.format(ETH_CONTRACTS_DIR))
+
+    for contract in ETH_CONTRACTS:
+        contract_path = os.path.join(ETH_CONTRACTS_DIR,
+                                     ETH_CONTRACTS[contract]['filename'])
+        if not os.path.exists(contract_path):
+            raise Exception('Contract not found: {}'.format(contract_path))
 
     @staticmethod
     def init_app(app):

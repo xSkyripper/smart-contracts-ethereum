@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d39630dbdcb0b6545a7bb499dda4aca6c89213f0d64078f3fedf3cc350057049"
+            "sha256": "1d014548f39fbbf090a4c62f74a4f2c171d7f261fb1b14cb89c9de82834b254d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -94,10 +94,10 @@
         },
         "easysolc": {
             "hashes": [
-                "sha256:b4a456dc14ee999313d8d33eac4b45e494b7b97a8049fe9e8462e76209195fa7"
+                "sha256:a631e75535cdccf87eea095bbf8ccdb3b9e231351dcdb19da745657052b841db"
             ],
             "index": "pypi",
-            "version": "==0.1.3"
+            "version": "==0.1.4"
         },
         "eth-abi": {
             "hashes": [
@@ -225,6 +225,14 @@
             ],
             "index": "pypi",
             "version": "==0.1.5"
+        },
+        "flask-web3": {
+            "hashes": [
+                "sha256:040dcae3ffb093b70aa8f20bb20a7c93e157726c93e3162605aa1c4c17ae8554",
+                "sha256:b3ea686a3903cf709032175f25f63aad3d5c94de13d9e96ab0b31fb9090214cf"
+            ],
+            "index": "pypi",
+            "version": "==0.1.1"
         },
         "gunicorn": {
             "hashes": [
@@ -732,11 +740,11 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:3e65a22eb0d4f1bdbc1eacccf4a3198bf8d4049dea5112d70a0c61b00e748d02",
-                "sha256:5924060b374f62608a078494b909d341720a050b5224ff87e17e12377486a71d"
+                "sha256:41568ea7ecb4a68d7f63837cf65b92ce8d0105e43196ff2b26622995bb3dc4b2",
+                "sha256:c3c573a29d7c9547fb90217ece8a8843aa0c1328a797e200290dc3d0b4b823be"
             ],
             "index": "pypi",
-            "version": "==4.1.0"
+            "version": "==4.1.1"
         },
         "pytest-cov": {
             "hashes": [

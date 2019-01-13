@@ -1,25 +1,32 @@
-from app.managers.smart_contract import Manager as SCManager, PaymentContract
+from app.ethereum import Manager as SCManager, PaymentContract
 import IPython
 import logging
-from web3 import Web3
+import os
+import os.path
+from app import create_app, web3
 
 logging.getLogger('smart_contract').setLevel(level=logging.INFO)
 
-web3_client = Web3(Web3.HTTPProvider('http://127.0.0.1:7545'))
-web3_client.eth.defaultAccount = '0xA6115D445B2D3DD2EBF9e7daEC2A135b4F750d02'
+app = create_app(os.getenv('FLASK_CONFIG', 'development'))
 
-contract_file_path = 'app/contracts_files/Payment.sol'
-contract_name = 'Payment'
+contract_owner = app.config['ETH_CONTRACT_OWNER']
+contract_file_path = os.path.join(app.config['ETH_CONTRACTS_DIR'],
+                                  app.config['ETH_CONTRACTS']['payment']['filename'])
+contract_name = app.config['ETH_CONTRACTS']['payment']['name']
 contract_amount_due = 1000000000000000000 # 1 ether
-scm = SCManager(web3_client)
-contract_eth_addr = scm.create_contract(contract_file_path, contract_name, contract_amount_due)
+scm = SCManager(web3)
+# contract_eth_addr = scm.create_contract(contract_owner,
+#                                         contract_file_path,
+#                                         contract_name,
+#                                         contract_amount_due)
+contract_build_path = SCManager.get_contract_build_path(contract_file_path)
+contract_abi, _ = SCManager.load_contract_build(contract_build_path)
 
-# contract_eth_addr = '0x1D52CE6C16748aA1DbC7B0Fad696a3e1dd8549e6'
-# contract_abi_path = SCManager.build_abi_path(contract_file_path)
-# contract_abi = SCManager.get_contract_abi(contract_abi_path)
-# pc = PaymentContract(web3_client=web3_client,
-#                      contract_eth_addr=contract_eth_addr,
-#                      contract_abi=contract_abi)
+contract_eth_addr = '0xbad1Ed73a418F6Fd70EAc09e2e041aad9875C622'
+pc = PaymentContract(web3_client=web3,
+                     owner=contract_owner,
+                     contract_eth_addr=contract_eth_addr,
+                     contract_abi=contract_abi)
 
 # r = pc.add_payer('0x2d337E1AB8AD8a5DBFfD6aC06f8E55F2E09bDf23')
 # r = pc.add_payer('0x32ae6e2418e99CdeFAE8173EA6B631F4891deCb4')
@@ -27,4 +34,6 @@ contract_eth_addr = scm.create_contract(contract_file_path, contract_name, contr
 # amount_due = pc.get_amount_due()
 # contract_balance = pc.get_contract_balance()
 
-# IPython.embed()
+IPython.embed()
+
+
