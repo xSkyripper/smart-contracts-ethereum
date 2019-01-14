@@ -10,7 +10,7 @@
         :picture="r.picture"
         :amount_due="r.amount_due"
         :description="r.description"
-        :admin=false
+        :admin=true
       />
     </div>
   </div>
@@ -23,7 +23,7 @@ import Vue from 'vue'
 import ContractComponent from '@/components/ContractComponent.vue'
 
 export default {
-  name: 'ContractsComponent',
+  name: 'ContractsAdminComponent',
   components: {
     ContractComponent
   },
@@ -37,9 +37,9 @@ export default {
     }
   },
   mounted: function() {
-    axios.get("http://localhost:5000/api/users/" + Vue.prototype.$username + "/contracts/").then(response => {
+      axios.get("http://localhost:5000/api/contracts").then(response => {
         this.contracts = response.data.contracts
-    })
+      })
   },
   methods: {
   }

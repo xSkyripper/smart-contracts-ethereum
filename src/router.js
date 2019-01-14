@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Contracts from './views/Contracts.vue'
+import ContractsAdmin from './views/ContractsAdmin.vue'
 import NewContract from './views/NewContract.vue'
 import Api from './views/Api.vue'
 
@@ -46,7 +47,7 @@ export default new Router({
     {
       path: '/contracts/admin',
       name: 'admin_contracts',
-      component: Contracts,
+      component: ContractsAdmin,
       meta: {
         title: 'Contracts',
         admin: true
