@@ -12,39 +12,6 @@ from app.models import Contract as ContractModel, User as UserModel
 from app.security import admin_required, user_required
 from app.ethereum import Manager as SCManager, PaymentContract
 
-@api_rest.route('/contracts/<int:contract_id>/users')
-class ContractUsersList(Resource):
-    @admin_required
-    def post(self, contract_id):
-        current_app.logger.info(f'Received POST on ContractUsers contract {contract_id}')
-        contract = ContractModel.query.get(contract_id)
-
-        if not contract:
-            return dict(error=f"There is no contract with Id {contract_id}"), 404
-
-        if not request.form.get('user_id'):
-            return dict(error=f"Bad request: the user_id was not defined"), 400
-
-        user_id = request.form.get('user_id')
-        user = UserModel.query.get(user_id)
-
-        if not user:
-            return dict(error=f"There is no user with Id {user_id}"), 404
-
-        try:
-            contract.users.append(user)
-            db.session.commit()
-        except exc.IntegrityError as e: 
-            current_app.logger.error(e)
-            db.session.rollback()
-            return dict(error=f'There was an error adding user with Id {user_id} to contract with Id {contract_id}:{e.orig}'), 400
-        
-        # TODO: call SCManager to add user
-
-        return dict(etag=contract_id, contract=contract.to_dict(with_users=True)), 200
-
-    # TODO: implement delete user from contract
-
 
 @api_rest.route('/contracts/<int:contract_id>')
 class Contract(Resource):
@@ -116,6 +83,7 @@ class Contract(Resource):
 
         return dict(), 204
 
+
 @api_rest.route('/contracts')
 class ContractList(Resource):
     @admin_required
@@ -140,10 +108,11 @@ class ContractList(Resource):
         # 1000000000000000000 = 1 ether
         cfg = current_app.config
         contract_eth_addr = scm.create_contract(
-            cfg['ETH_CONTRACT_OWNER'],
-            os.path.join(cfg['ETH_CONTRACTS_DIR'], cfg['ETH_CONTRACTS']['payment']['filename']),
-            cfg['ETH_CONTRACTS']['payment']['name'],
-            amount_due)
+            amount_due,
+            owner=cfg['ETH_CONTRACT_OWNER'],
+            contract_path=os.path.join(cfg['ETH_CONTRACTS_DIR'],
+                                       cfg['ETH_CONTRACTS']['payment']['filename']),
+            contract_name=cfg['ETH_CONTRACTS']['payment']['name'])
 
         contract = ContractModel(amount_due=amount_due,
                                  name=name,
@@ -159,3 +128,57 @@ class ContractList(Resource):
             return dict(error=f'There was an error creating the contract:{e.orig}'), 400
 
         return dict(contract=contract.to_dict()), 201
+
+
+@api_rest.route('/contracts/<int:contract_id>/users')
+class ContractUsersList(Resource):
+    @admin_required
+    def post(self, contract_id):
+        current_app.logger.info(f'Received POST on ContractUsers contract {contract_id}')
+        user_id = request.form.get('user_id')
+
+        if not contract_id:
+            return dict(error=f'contract_id must be specified!'), 400
+        contract = ContractModel.query.get(contract_id)
+        if not contract:
+            return dict(error=f"There is no contract with Id {contract_id}"), 404
+
+        if not request.form.get('user_id'):
+            return dict(error=f"Bad request: the user_id was not defined"), 400
+        user = UserModel.query.get(user_id)
+        if not user:
+            return dict(error=f"There is no user with Id {user_id}"), 404
+
+        if user in contract.users:
+            return dict(error=f"The user with Id {user.id} is already in the contract {contract.id} users list"), 409
+
+        try:
+            contract.users.append(user)
+            db.session.commit()
+        except exc.IntegrityError as e: 
+            current_app.logger.error(e)
+            db.session.rollback()
+            return dict(error=f"There was an error adding user with Id {user_id} to contract with Id {contract_id}:{e.orig}"), 400
+
+        cfg = current_app.config
+        contract_path = os.path.join(cfg['ETH_CONTRACTS_DIR'],
+                                     cfg['ETH_CONTRACTS']['payment']['filename'])
+        contract_build_path = SCManager.get_contract_build_path(contract_path)
+        contract_abi, _ = SCManager.load_contract_build(contract_build_path)
+        payment_contract = PaymentContract(
+            web3_client=current_web3,
+            owner=cfg['ETH_CONTRACT_OWNER'],
+            contract_eth_addr=contract.ethereum_addr,
+            contract_abi=contract_abi)
+
+        try:
+            eth_res = payment_contract.add_payer(user.ethereum_id)
+        except ValueError as e:
+            db.session.rollback()
+            return dict(error=f'Ethereum error!', 
+                        ethereum_error=dict(message=eth_res['message'])), 400
+
+        return dict(etag=contract_id,
+                    contract=contract.to_dict(with_users=True)), 200
+
+    # TODO: implement delete user from contract

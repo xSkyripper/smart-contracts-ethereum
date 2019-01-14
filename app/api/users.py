@@ -9,20 +9,6 @@ from app.api import api_rest
 from app import db
 
 
-@api_rest.route('/users/<int:user_id>/contracts')
-class UserContractsList(Resource):
-    # TODO: HARDCODED
-    def get(self, user_id):
-        return dict(contracts=[{
-                "id": 1,
-                "amount_due": 69,
-                "name": "Test1Contract",
-                "description": "PWxjaFAPHmnmzqfHsSuhJHDfgQnGVeissiJeUyTjZVCPdtGrTMXbow",
-                "ethereum_addr": "VhtMtETeFvucWSenfGXrHVrkZnieUqXvTpqcAmsC",
-                "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",
-                "users": []}])
-
-
 @api_rest.route('/users/<int:user_id>')
 class User(Resource):
     @admin_required
@@ -130,3 +116,17 @@ class UserList(Resource):
             return dict(error=f'There was an error creating the user:{e.orig}'), 400
 
         return dict(user=user.to_dict()), 201
+
+
+@api_rest.route('/users/<int:user_id>/contracts')
+class UserContractsList(Resource):
+    # TODO: HARDCODED
+    def get(self, user_id):
+        return dict(contracts=[{
+                "id": 1,
+                "amount_due": 69,
+                "name": "Test1Contract",
+                "description": "PWxjaFAPHmnmzqfHsSuhJHDfgQnGVeissiJeUyTjZVCPdtGrTMXbow",
+                "ethereum_addr": "VhtMtETeFvucWSenfGXrHVrkZnieUqXvTpqcAmsC",
+                "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",
+                "users": []}])
