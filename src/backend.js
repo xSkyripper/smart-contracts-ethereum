@@ -42,6 +42,17 @@ export default {
 
     return axios.post('http://localhost:5000/register', authorizationParameters, config)
       .then(response => response)
+  },
+
+  login (authorizationParameters) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    return axios.post('http://localhost:5000/login', authorizationParameters, config)
+      .then(response => response)
   }
 
 }

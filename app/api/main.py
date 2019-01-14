@@ -82,8 +82,8 @@ def register():
         user.email = request.form.get('email')
     if request.form.get('ethereum_id'):
         user.ethereum_id = request.form.get('ethereum_id')
-    if request.form.get('password_hash'):
-        user.password_hash = request.form.get('password_hash')
+    if request.form.get('password'):
+        user.password = request.form.get('password')
     if request.form.get('contracts'):
         user.contracts = request.form.get('contracts')
     if request.form.get('role_id'):

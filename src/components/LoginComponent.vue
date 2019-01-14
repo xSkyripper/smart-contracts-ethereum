@@ -13,7 +13,7 @@
                   <i class="fas fa-user"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="username">
+              <input v-model="user.email" type="text" class="form-control" placeholder="email">
             </div>
             <div class="input-group form-group">
               <div class="input-group-prepend">
@@ -21,7 +21,7 @@
                   <i class="fas fa-key"></i>
                 </span>
               </div>
-              <input type="password" class="form-control" placeholder="password">
+              <input v-model="user.password" type="password" class="form-control" placeholder="password">
             </div>
             <div class="row align-items-center remember">
               <input type="checkbox">Remember Me
@@ -51,6 +51,8 @@
 <script>
 import axios from 'axios'
 import Vue from 'vue'
+import qs from 'qs'
+import $backend from '../backend'
 
 export default {
   name: 'LoginComponent',
@@ -59,20 +61,18 @@ export default {
   },
   data () {
     return {
-      id: '',
-      error: ''
+      user: {
+        password: '',
+        email: ''
+      }
     }
   },
   methods: {
     login () {
-      return axios.get('http://localhost:5000/login/')
-        .then(response => {
-          console.log(response.data.id)
-          Vue.prototype.$username = response.data.id
-          if (typeof response.data.id !== undefined) {
-            alert('Login successful')
-          }
-        })
+      $backend.login(qs.stringify(this.user))
+          .then(response => {
+            console.log(response)
+      });
     }
   }
 }
