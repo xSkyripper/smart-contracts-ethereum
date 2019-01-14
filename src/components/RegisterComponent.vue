@@ -78,6 +78,7 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import $backend from '../backend'
 
 export default {
   name: 'RegisterComponent',
@@ -98,16 +99,11 @@ export default {
   },
   methods: {
     register () {
-      const config = {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-
-      return axios.post('http://localhost:5000/register', qs.stringify(this.user), config)
-        .then(response => {
-          console.log(response)
-        })
+ 
+         $backend.register(qs.stringify(this.user))
+          .then(response => {
+            console.log(response)
+          });
     }
   }
 }

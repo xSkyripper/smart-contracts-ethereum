@@ -50,6 +50,7 @@ class User(UserMixin, db.Model):
     ethereum_id = db.Column(db.String(512), unique=True, index=True)
     password_hash = db.Column(db.String(256))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    registered = db.Column(db.Boolean, default=False)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -116,7 +117,8 @@ class User(UserMixin, db.Model):
             last_name=self.last_name,
             email=self.email,
             ethereum_id=self.ethereum_id,
-            contracts=contracts)
+            contracts=contracts,
+            registered=self.registered)
 
     def __repr__(self):
         return '<User \'%s\'>' % self.full_name()

@@ -31,5 +31,17 @@ export default {
   fetchSecureResource () {
     return $axios.get(`secure-resource/zzz`)
       .then(response => response.data)
+  },
+
+  register (authorizationParameters) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    return axios.post('http://localhost:5000/register', authorizationParameters, config)
+      .then(response => response)
   }
+
 }

@@ -64,10 +64,12 @@ def register():
 
     # Get user object from the users (UserModel) table
     user = User.query.filter_by(gov_id=gov_id).first()       
-    
     # Stop if the user does not exist
     if not user:
         return jsonify(dict(error=f"There is no user with gov_id {gov_id}")), 404
+
+    if user.registered is True:
+        return jsonify(dict(error=f"User already exists in data base {gov_id}")), 409
     
     # Update User data, if present in the request
     if request.form.get('gov_id'):
@@ -87,6 +89,7 @@ def register():
     if request.form.get('role_id'):
         user.role_id = request.form.get('role_id')
 
+    user.registered = True
     try:
         db.session.commit()
     except exc.IntegrityError as e:
