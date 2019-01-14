@@ -23,7 +23,7 @@
                   <i class="fas fa-user"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" placeholder="Username">
+              <input v-model="payer.ssn" type="text" class="form-control" placeholder="Social Security Number">
             </div>
             <div class="input-group form-group">
               <div class="input-group-prepend">
@@ -31,7 +31,7 @@
                   <i class="far fa-address-card"></i>
                 </span>
               </div>
-              <input type="password" class="form-control" placeholder="Social Security Number">
+              <input v-model="payer.eth_id" type="text" class="form-control" placeholder="ETH Wallet ID">
             </div>
           </form>
         </section>
@@ -40,8 +40,8 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="close"
-              aria-label="Close modal"
+              @click="onboard"
+              aria-label="Onboard"
             >Onboard!</button>
           </slot>
         </footer>
@@ -49,18 +49,34 @@
     </div>
   </transition>
 </template>
-
 <script>
+import axios from 'axios'
+import Vue from 'vue'
 export default {
   name: 'OnboardPayerModalComponent',
+  data () {
+    return {
+      payer: {
+        ssn: '',
+        eth_id: ''
+      }
+    }
+  },
   methods: {
     close () {
       this.$emit('close')
+    },
+    onboard () {
+      console.log(this.payer.ssn)
+      console.log(this.payer.eth_id)
+      console.log(this.id)
+      // axios.post("").then(response => {this.contracts = response.data.contracts})
     }
   },
   props: {
     name: String,
-    service: String
+    service: String,
+    id: Number
   }
 }
 </script>

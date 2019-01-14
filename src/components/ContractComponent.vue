@@ -22,12 +22,10 @@
         </div>
       </div>
     </div>
-    <OnboardPayerModalComponent :name="name" :service="description" v-show="isOnboardPayerModalVisible" @close="closeOnboardPayerModal"/>
-    <PayContractModalComponent :name="name" :service="description" v-show="isPayContractModalVisible" @close="closePayContractModal"/>
+    <OnboardPayerModalComponent :name="name" :service="description" :id="id" v-show="isOnboardPayerModalVisible" @close="closeOnboardPayerModal"/>
+    <PayContractModalComponent :name="name" :service="description" :id="id" v-show="isPayContractModalVisible" @close="closePayContractModal"/>
   </div>
-
 </template>
-
 <script>
 import OnboardPayerModalComponent from '@/components/OnboardPayerModalComponent.vue'
 import PayContractModalComponent from '@/components/PayContractModalComponent.vue'

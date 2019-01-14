@@ -32,18 +32,24 @@
     </div>
   </transition>
 </template>
-
 <script>
+import axios from 'axios'
+import Vue from 'vue'
+
 export default {
   name: 'PayContractModalComponent',
   methods: {
     close () {
       this.$emit('close')
+    },
+    pay () {
+
     }
   },
   props: {
     name: String,
-    service: String
+    service: String,
+    id: Number
   }
 }
 </script>
