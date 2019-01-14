@@ -6,15 +6,15 @@
           <h3 class="panel-title">{{ name }}</h3>
         </div>
         <div class="panel-body">
-          <img class="img-rounded img-center" :src="picture" data-holder-rendered="true">
+          <img class="img-rounded img-center" src="../assets/ETHEREUM-ICON_Black_small.png" data-holder-rendered="true">
           <span class="info-line">
-            <strong>Id</strong>:
-            <span class="service">{{ id }}</span>
+            <strong>Description</strong>:
+            <span class="service">{{ description }}</span>
           </span>
 
           <span class="info-line">
-            <strong>Amount</strong>:
-            <span class="due_date">{{ due_date }}</span>
+            <strong>Amount due</strong>:
+            <span class="due_date">{{ amount_due | wei_to_eth }} ETH</span>
           </span>
 
           <button v-if="admin" @click="showOnboardPayerModal" class="btn btn-default btn-pay" type="button" data-id="0">On-board payer</button>
@@ -22,8 +22,8 @@
         </div>
       </div>
     </div>
-    <OnboardPayerModalComponent :name="name" :service="service" v-show="isOnboardPayerModalVisible" @close="closeOnboardPayerModal"/>
-    <PayContractModalComponent :name="name" :service="service" v-show="isPayContractModalVisible" @close="closePayContractModal"/>
+    <OnboardPayerModalComponent :name="name" :service="description" v-show="isOnboardPayerModalVisible" @close="closeOnboardPayerModal"/>
+    <PayContractModalComponent :name="name" :service="description" v-show="isPayContractModalVisible" @close="closePayContractModal"/>
   </div>
 
 </template>
@@ -42,9 +42,8 @@ export default {
     id: Number,
     name: String,
     picture: String,
-    service: String,
-    due_date: Number,
-    location: String,
+    description: String,
+    amount_due: Number,
     admin: Boolean
   },
   data () {
@@ -73,6 +72,11 @@ export default {
     },
     closePayContractModal () {
       this.isPayContractModalVisible = false
+    }
+  },
+  filters: {
+    wei_to_eth: function (value) {
+      return value / 1000000000000000000
     }
   }
 }

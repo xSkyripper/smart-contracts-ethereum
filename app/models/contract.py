@@ -50,7 +50,7 @@ class Contract(db.Model):
 
             c = Contract(
                 name='{} {}'.format(payment_contract_meta['name'], i + 1),
-                description=fake.pystr(min_chars=40, max_chars=80),
+                description=fake.pystr(min_chars=7, max_chars=8),
                 amount_due=amount_due,
                 ethereum_addr=contract_eth_addr,
                 **kwargs)

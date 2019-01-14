@@ -3,13 +3,13 @@
     <h1>{{ msg }}</h1>
     <div class="row">
       <ContractComponent
-        v-for="r in resources"
+        v-for="r in contracts"
         :key="r.id"
         :id="r.id"
-        :name="r.description.slice(0,5)"
+        :name="r.name"
         :picture="r.picture"
-        :due_date="r.tax"
-        :service="r.service"
+        :amount_due="r.amount_due"
+        :description="r.description"
 
         :admin=$route.meta.admin
       />
@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      resources: [],
+      contracts: [],
       error: ''
     }
   },
@@ -42,17 +42,14 @@ export default {
     if(this.$route.meta.admin) {
       axios.get("http://localhost:5000/api/contracts")
       .then(response => {
-        this.resources = response.data.contracts})
+        this.contracts = response.data.contracts})
     } else {
       axios.get("http://localhost:5000/api/users/" + Vue.prototype.$username + "/contracts/")
       .then(response => {
-        this.resources = response.data.contracts})
+        this.contracts = response.data.contracts})
     }
   },
   methods: {
-    contracts () {
-      alert('Contracts')
-    }
   }
 }
 </script>

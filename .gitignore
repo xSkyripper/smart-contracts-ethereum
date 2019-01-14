@@ -8,3 +8,4 @@ server/app/__pycache__/__init__.cpython-37.pyc
 *.sqlite
 /dist
 .vscode
+*.env
