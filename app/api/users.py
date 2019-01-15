@@ -3,10 +3,10 @@ from flask import request, current_app
 from flask_restplus import Resource
 from sqlalchemy import exc
 
+from app import db, utils
 from app.models import User as UserModel
 from app.security import admin_required, user_required
 from app.api import api_rest
-from app import db
 
 
 @api_rest.route('/users/<int:user_id>')
@@ -96,7 +96,7 @@ class UserList(Resource):
         last_name = request.form.get('last_name')
         email = request.form.get('email')
         ethereum_id = request.form.get('ethereum_id')
-        password_hash = (request.form.get('password') or '') + 'hashed'
+        password = request.form.get('password')
         role_id = request.form.get('role_id')
 
         user = UserModel(gov_id=gov_id,
@@ -104,7 +104,7 @@ class UserList(Resource):
                          last_name=last_name,
                          email=email,
                          ethereum_id=ethereum_id,
-                         password_hash=password_hash,
+                         password=password,
                          role_id=role_id)
 
         try:
@@ -120,13 +120,20 @@ class UserList(Resource):
 
 @api_rest.route('/users/<int:user_id>/contracts')
 class UserContractsList(Resource):
-    # TODO: HARDCODED
+    @user_required
     def get(self, user_id):
-        return dict(contracts=[{
-                "id": 1,
-                "amount_due": 69,
-                "name": "Test1Contract",
-                "description": "PWxjaFAPHmnmzqfHsSuhJHDfgQnGVeissiJeUyTjZVCPdtGrTMXbow",
-                "ethereum_addr": "VhtMtETeFvucWSenfGXrHVrkZnieUqXvTpqcAmsC",
-                "abi": "cTxsmyXGqPMWAmWslweUqimgORrdRYOVpVoRpIgiZNtOmIBqymUTjTbJAZTAWALtNwjZkhKaABgdvjvCdulzdXPCqpTIeSHOHcZddHIc",
-                "users": []}])
+        current_app.logger.info(f'Received GET on users/{user_id}/contracts')
+
+        user = UserModel.query.get(user_id)
+        if not user:
+            return dict(error=f'There is no user with Id {user_id}'), 404
+
+        cfg = current_app.config
+        contracts = user.to_dict(with_contracts=True)['contracts']
+        contracts_with_abi = []
+        for contract in contracts:
+            contract_data = contract
+            contract_data['abi'] = utils.get_payment_contract_abi(cfg)
+            contracts_with_abi.append(contract_data)
+
+        return dict(contracts=contracts_with_abi), 200

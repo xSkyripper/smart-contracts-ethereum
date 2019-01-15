@@ -106,19 +106,19 @@ class User(UserMixin, db.Model):
                 db.session.rollback()
 
     def to_dict(self, with_contracts=False):
-        contracts = []
-        if with_contracts:
-            contracts = [contract.id for contract in self.contracts]
-
-        return dict(
+        result = dict(
             id=self.id,
             gov_id=self.gov_id,
             first_name=self.first_name,
             last_name=self.last_name,
             email=self.email,
             ethereum_id=self.ethereum_id,
-            contracts=contracts,
             registered=self.registered)
+
+        if with_contracts:
+            result['contracts'] = [contract.to_dict() for contract in self.contracts]
+
+        return result
 
     def __repr__(self):
         return '<User \'%s\'>' % self.full_name()

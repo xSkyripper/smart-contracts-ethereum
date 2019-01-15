@@ -62,17 +62,17 @@ class Contract(db.Model):
                 db.session.rollback()
 
     def to_dict(self, with_users=False):
-        users = []
-        if with_users:
-            users = [user.id for user in self.users]
-
-        return dict(
+        result = dict(
             id=self.id,
             name=self.name,
             description=self.description,
             amount_due=self.amount_due,
-            ethereum_addr=self.ethereum_addr,
-            users=users)
+            ethereum_addr=self.ethereum_addr)
+
+        if with_users:
+             result['users'] = [user.to_dict() for user in self.users]
+
+        return result
 
     def __repr__(self):
         return "<Contract %r>" % str(self.__dict__)

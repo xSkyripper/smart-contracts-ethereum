@@ -22,15 +22,16 @@ scm = SCManager(web3)
 contract_build_path = SCManager.get_contract_build_path(contract_file_path)
 contract_abi, _ = SCManager.load_contract_build(contract_build_path)
 
-contract_eth_addr = '0xbad1Ed73a418F6Fd70EAc09e2e041aad9875C622'
+contract_eth_addr = '0x79337b477DCd8F6b2e10056e925b4Ea72FEf8865'
 pc = PaymentContract(web3_client=web3,
                      owner=contract_owner,
                      contract_eth_addr=contract_eth_addr,
                      contract_abi=contract_abi)
 
+# r = pc.remove_payer('0x2d337E1AB8AD8a5DBFfD6aC06f8E55F2E09bDf23')
 # r = pc.add_payer('0x2d337E1AB8AD8a5DBFfD6aC06f8E55F2E09bDf23')
 # r = pc.add_payer('0x32ae6e2418e99CdeFAE8173EA6B631F4891deCb4')
-# payers = pc.get_payers()
+payers = pc.get_payers()
 # amount_due = pc.get_amount_due()
 # contract_balance = pc.get_contract_balance()
 

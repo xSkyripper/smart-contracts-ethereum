@@ -23,8 +23,11 @@ class Contract(Resource):
         if not contract:
             return dict(error=f"There is no contract with Id {contract_id}"), 404
         
-        return dict(contract=contract.to_dict()), 200
-        # return dict(contracts=[{"id": 7, "name": "name1", "service": "service1"}]), 201
+        cfg = current_app.config
+        contract_data = contract.to_dict()
+        contract_data['abi'] = utils.get_payment_contract_abi(cfg)
+        
+        return dict(contract=contract_data), 200
 
     @admin_required
     def put(self, contract_id):
@@ -76,8 +79,10 @@ class Contract(Resource):
         if not contract:
             return dict(error=f"There is no contract with Id {contract_id}"), 404
         
-        pc = utils.get_payment_contract(current_app.config, current_web3, contract.ethereum_addr)
-        eth_res = pc.close()
+        payment_contract = utils.get_payment_contract(cfg=current_app.config,
+                                                      web3=urrent_web3,
+                                                      contract_eth_addr=contract.ethereum_addr)
+        eth_res = payment_contract.close()
 
         db.session.delete(contract)
 
@@ -90,7 +95,16 @@ class ContractList(Resource):
     def get(self):
         current_app.logger.info(f'Received GET on contracts')
         contracts = ContractModel.query.all()
-        return dict(contracts=[contract.to_dict() for contract in contracts]), 200
+        
+        cfg = current_app.config
+
+        contracts_with_abi = []
+        for contract in contracts:
+            contract_data = contract.to_dict()
+            contract_data['abi'] = utils.get_payment_contract_abi(cfg)
+            contracts_with_abi.append(contract_data)
+
+        return dict(contracts=contracts_with_abi), 200
 
     @admin_required
     def post(self):
@@ -143,8 +157,8 @@ class ContractUsersList(Resource):
         if not contract:
             return dict(error=f"There is no contract with Id {contract_id}"), 404
 
-        if not request.form.get('user_id'):
-            return dict(error=f"Bad request: the user_id was not defined"), 400
+        if not user_id:
+            return dict(error=f"The user_id was not defined"), 400
         user = UserModel.query.get(user_id)
         if not user:
             return dict(error=f"There is no user with Id {user_id}"), 404
@@ -161,15 +175,9 @@ class ContractUsersList(Resource):
             return dict(error=f"There was an error adding user with Id {user_id} to contract with Id {contract_id}:{e.orig}"), 400
 
         cfg = current_app.config
-        contract_path = os.path.join(cfg['ETH_CONTRACTS_DIR'],
-                                     cfg['ETH_CONTRACTS']['payment']['filename'])
-        contract_build_path = SCManager.get_contract_build_path(contract_path)
-        contract_abi, _ = SCManager.load_contract_build(contract_build_path)
-        payment_contract = PaymentContract(
-            web3_client=current_web3,
-            owner=cfg['ETH_CONTRACT_OWNER'],
-            contract_eth_addr=contract.ethereum_addr,
-            contract_abi=contract_abi)
+        payment_contract = utils.get_payment_contract(cfg=current_app.config,
+                                                      web3=current_web3,
+                                                      contract_eth_addr=contract.ethereum_addr)
 
         try:
             eth_res = payment_contract.add_payer(user.ethereum_id)
@@ -179,6 +187,4 @@ class ContractUsersList(Resource):
                         ethereum_error=dict(message=eth_res['message'])), 400
 
         return dict(etag=contract_id,
-                    contract=contract.to_dict(with_users=True)), 200
-
-    # TODO: implement delete user from contract
+                    contract=contract.to_dict()), 204
