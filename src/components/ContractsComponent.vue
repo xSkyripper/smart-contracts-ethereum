@@ -19,6 +19,7 @@
 <script>
 import axios from 'axios'
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
 import ContractComponent from '@/components/ContractComponent.vue'
 
@@ -30,6 +31,9 @@ export default {
   props: {
     msg: String
   },
+  // computed: mapState({
+  //   contracts: state => state.contracts
+  // }),
   data () {
     return {
       contracts: [],
@@ -37,12 +41,13 @@ export default {
     }
   },
   mounted: function() {
-    axios.get("http://localhost:5000/api/users/" + 12 + "/contracts/").then(response => {
+    axios.get("http://localhost:5000/api/users/" + Vue.prototype.$username + "/contracts/").then(response => {
         this.contracts = response.data.contracts
     })
   },
-  methods: {
-  }
+  // beforeMount () {
+  //   this.$store.dispatch('loadUserContracts')
+  // }
 }
 </script>
 

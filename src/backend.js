@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 let $axios = axios.create({
-  baseURL: '/api/',
+  baseURL: 'http://localhost:5000/',
   timeout: 5000,
-  headers: {'Content-Type': 'application/json'}
+  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 })
 
 // Request Interceptor
@@ -22,37 +22,37 @@ $axios.interceptors.response.use(function (response) {
 })
 
 export default {
-
-  fetchResource () {
-    return $axios.get(`resource/xxx`)
-      .then(response => response.data)
-  },
-
-  fetchSecureResource () {
-    return $axios.get(`secure-resource/zzz`)
-      .then(response => response.data)
-  },
-
   register (authorizationParameters) {
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    }
-
-    return axios.post('http://localhost:5000/register', authorizationParameters, config)
+    return $axios.post('register', authorizationParameters)
       .then(response => response)
   },
 
   login (authorizationParameters) {
-    const config = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    }
-
-    return axios.post('http://localhost:5000/login', authorizationParameters, config)
+    return $axios.post('login', authorizationParameters)
       .then(response => response)
-  }
+  },
 
+  fetchUserContracts (userId) {
+    // return $axios.get(`api/users/{userId}/contracts`).then()
+    console.log(`fetchUserContracts for ${userId}`)
+    return new Promise((resolve, reject) => {
+      const contracts = [
+        {
+          id: 1,
+          name: 'Contract 1',
+          picture: 'someLink',
+          amount_due: 232323,
+          description: 'Description 1'
+        },
+        {
+          id: 2,
+          name: 'Contract 2',
+          picture: 'someLink 2',
+          amount_due: 2323232,
+          description: 'Description 2'
+        }
+      ]
+      resolve(contracts)
+    })
+  }
 }
