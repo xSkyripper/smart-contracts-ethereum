@@ -18,23 +18,20 @@
           </span>
 
           <button v-if="admin" @click="showOnboardPayerModal" class="btn btn-default btn-pay" type="button" data-id="0">On-board payer</button>
-          <button v-else @click="showPayContractModal" class="btn btn-default btn-pay" type="button" data-id="0">Pay</button>
+          <button v-else @click="pay" class="btn btn-default btn-pay" type="button" data-id="0">Pay</button>
         </div>
       </div>
     </div>
     <OnboardPayerModalComponent :name="name" :service="description" :id="id" v-show="isOnboardPayerModalVisible" @close="closeOnboardPayerModal"/>
-    <PayContractModalComponent :name="name" :service="description" :id="id" v-show="isPayContractModalVisible" @close="closePayContractModal"/>
   </div>
 </template>
 <script>
 import OnboardPayerModalComponent from '@/components/OnboardPayerModalComponent.vue'
-import PayContractModalComponent from '@/components/PayContractModalComponent.vue'
 
 export default {
   name: 'ContractComponent',
   components: {
-    OnboardPayerModalComponent,
-    PayContractModalComponent
+    OnboardPayerModalComponent
   },
   props: {
     id: Number,
@@ -48,9 +45,7 @@ export default {
     return {
       resources: [],
       error: '',
-      isOnboardPayerModalVisible: false,
-      isPayContractModalVisible: false
-    }
+      isOnboardPayerModalVisible: false }
   },
   methods: {
     pay () {
@@ -64,12 +59,6 @@ export default {
     },
     closeOnboardPayerModal () {
       this.isOnboardPayerModalVisible = false
-    },
-    showPayContractModal () {
-      this.isPayContractModalVisible = true
-    },
-    closePayContractModal () {
-      this.isPayContractModalVisible = false
     }
   },
   filters: {
