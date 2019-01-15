@@ -23,7 +23,7 @@
 </template>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
 <script>
-import axios from 'axios'
+import $backend from '../backend'
 import Vue from 'vue'
 
 import ContractComponent from '@/components/ContractComponent.vue'
@@ -42,10 +42,10 @@ export default {
       error: ''
     }
   },
-  mounted: function() {
-      axios.get("http://localhost:5000/api/contracts").then(response => {
-        this.contracts = response.data.contracts
-      })
+  mounted () {
+    $backend.fetchAllContracts().then(response => {
+      this.contracts = response.data.contracts
+    })
   },
   methods: {
   }

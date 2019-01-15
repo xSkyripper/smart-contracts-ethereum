@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from './store'
 
 let $axios = axios.create({
   baseURL: 'http://localhost:5000/',
@@ -8,7 +9,8 @@ let $axios = axios.create({
 
 // Request Interceptor
 $axios.interceptors.request.use(function (config) {
-  // config.headers['Authorization'] = `Bearer `
+  config.headers['Authorization'] = 'Bearer ' + store.getters.getJwtToken
+  console.log(config.headers['Authorization'])
   return config
 })
 
@@ -55,6 +57,11 @@ export default {
       resolve(contracts)
     })
   },
+
+  fetchAllContracts () {
+    return $axios.get('api/contracts').then()
+  },
+
   onboard (payer) {
     const config = {
       headers: {

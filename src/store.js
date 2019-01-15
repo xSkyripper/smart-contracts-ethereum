@@ -65,6 +65,9 @@ const getters = {
   },
   isAdmin (state) {
     return state.userData.is_admin
+  },
+  getJwtToken (state) {
+    return state.token
   }
 }
 
