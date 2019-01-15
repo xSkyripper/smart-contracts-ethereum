@@ -48,12 +48,6 @@ export default {
       isOnboardPayerModalVisible: false }
   },
   methods: {
-    pay () {
-      alert('Pay')
-    },
-    onboard () {
-      alert('On-board payer')
-    },
     showOnboardPayerModal () {
       this.isOnboardPayerModalVisible = true
     },

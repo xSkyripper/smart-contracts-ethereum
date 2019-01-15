@@ -99,11 +99,11 @@ export default {
   },
   methods: {
     register () {
- 
-         $backend.register(qs.stringify(this.user))
-          .then(response => {
-            console.log(response)
-          });
+      $backend.register(qs.stringify(this.user))
+        .then(response => {
+          console.log(response)
+          this.$router.push({ name: 'login'})
+        })
     }
   }
 }

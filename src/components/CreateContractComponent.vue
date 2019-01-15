@@ -39,9 +39,9 @@
             </div>
 
             <div class="mb-3">
-              <label for="walletId">Amount Due</label>
+              <label for="walletId">Amount Due (ETH)</label>
               <div class="input-group">
-                <input v-model="contract.amount_due" type="number" step="10000" class="form-control" id="amount_dueamount_due" required>
+                <input v-model="contract.amount_due" type="number" step="0.01" class="form-control" id="amount_dueamount_due" required>
                 <div class="invalid-feedback" style="width: 100%;">Amount due is required</div>
               </div>
             </div>
@@ -83,10 +83,12 @@ export default {
   },
   methods: {
     addContract () {
+      this.contract.amount_due = 1000000000000000000 * this.contract.amount_due
       $backend.addContract(qs.stringify(this.contract))
-          .then(response => {
-            console.log(response)
-      });    
+        .then(response => {
+          console.log(response)
+          this.$router.push({ name: 'admin_contracts'})
+        })
     }
   }
 }

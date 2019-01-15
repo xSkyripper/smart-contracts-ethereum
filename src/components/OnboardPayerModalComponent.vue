@@ -74,6 +74,8 @@ export default {
       $backend.onboard(qs.stringify(this.payer))
         .then(response => {
           console.log(response)
+          this.$emit('close')
+          alert('Payer onboarding successfull!')
         })
     }
   },
