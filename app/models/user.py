@@ -113,6 +113,7 @@ class User(UserMixin, db.Model):
             last_name=self.last_name,
             email=self.email,
             ethereum_id=self.ethereum_id,
+            is_admin=self.is_admin(),
             registered=self.registered)
 
         if with_contracts:

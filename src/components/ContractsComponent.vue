@@ -37,23 +37,23 @@ export default {
   props: {
     msg: String
   },
-  // computed: mapState({
-  //   contracts: state => state.contracts
-  // }),
-  data () {
-    return {
-      contracts: [],
-      error: ''
-    }
-  },
-  mounted: function() {
-    axios.get("http://localhost:5000/api/users/" + 12 + "/contracts/").then(response => {
-        this.contracts = response.data.contracts
-    })
-  },
-  // beforeMount () {
-  //   this.$store.dispatch('loadUserContracts')
-  // }
+  computed: mapState({
+    contracts: state => state.contracts
+  }),
+  // data () {
+  //   return {
+  //     contracts: [],
+  //     error: ''
+  //   }
+  // },
+  // mounted: function() {
+  //   axios.get("http://localhost:5000/api/users/" + 12 + "/contracts/").then(response => {
+  //       this.contracts = response.data.contracts
+  //   })
+  // },
+  beforeMount () {
+    this.$store.dispatch('loadUserContracts')
+  }
 }
 </script>
 

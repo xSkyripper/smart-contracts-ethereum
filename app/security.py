@@ -29,13 +29,13 @@ def permission_required(permission):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            # if not request.headers.get('Authorization'):
-            #     return jsonify(dict(error=f"Missing authorization header"), 403)
+            if not request.headers.get('Authorization'):
+                return jsonify(dict(error=f"Missing authorization header"), 403)
                 
-            # verify_jwt_in_request()
+            verify_jwt_in_request()
 
-            # if not current_user.can(permission):
-            #     return jsonify(dict(error=f"Unauthorized to do this"), 403)
+            if not current_user.can(permission):
+                return jsonify(dict(error=f"Unauthorized to do this"), 403)
 
             return f(*args, **kwargs)
 

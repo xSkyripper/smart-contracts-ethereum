@@ -40,6 +40,7 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    current_app.logger.info(f"METHOD on /login with email: {email} pass: {password}")
     if not email or not password:
         return jsonify(dict(error=f"Invalid parameters")), 400
 
@@ -52,8 +53,9 @@ def login():
         return jsonify(dict(error=f'Invalid email or password')), 401 
 
     access_token = create_access_token(identity=user.id)
+    user_data = user.to_dict()
 
-    return jsonify(dict(access_token=access_token)), 200
+    return jsonify(dict(access_token=access_token, user_data=user_data)), 200
 
 
 @main_bp.route('/register', methods=['GET', 'POST'])

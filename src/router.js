@@ -7,6 +7,7 @@ import Contracts from './views/Contracts.vue'
 import ContractsAdmin from './views/ContractsAdmin.vue'
 import NewContract from './views/NewContract.vue'
 import Api from './views/Api.vue'
+import store from './store'
 
 Vue.use(Router)
 
@@ -60,6 +61,13 @@ export default new Router({
       meta: {
         title: 'Contracts',
         admin: false
+      },
+      beforeEnter (to, from, next) {
+        if (!store.getters.isAuthenticated) {
+          next('/login')
+        } else {
+          next()
+        }
       }
     },
     {

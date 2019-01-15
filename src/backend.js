@@ -8,7 +8,7 @@ let $axios = axios.create({
 
 // Request Interceptor
 $axios.interceptors.request.use(function (config) {
-  config.headers['Authorization'] = 'Fake Token'
+  // config.headers['Authorization'] = `Bearer `
   return config
 })
 
@@ -66,7 +66,7 @@ export default {
       .then(response => response)
   },
 
-  addContract(info) {
+  addContract (info) {
     const config = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

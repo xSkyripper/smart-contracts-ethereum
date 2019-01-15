@@ -1,17 +1,43 @@
 <template>
   <div id="app">
     <div id="nav" class="py-3 mb-5" style="background-color: rgba(0, 0, 0, 0.8) !important;">
-      <router-link class="mx-1" to="/">Home</router-link> |
-      <router-link class="mx-1" to="/login">Login</router-link> |
-      <router-link class="mx-1" to="/register">Register</router-link> |
-      <router-link class="mx-1" to="/contracts">Contracts</router-link> |
-      <router-link class="mx-1" to="/contracts/admin">Contracts (Admin)</router-link> |
-      <router-link class="mx-1" to="/contracts/new">New Contract (Admin)</router-link>
+      <router-link class="mx-1" to="/">
+        Home
+      </router-link> |
+      <router-link class="mx-1" to="/login" v-if="!isAuthenticated">
+        Login
+      </router-link> |
+      <router-link class="mx-1" to="/register" v-if="!isAuthenticated">
+        Register
+      </router-link> |
+      <router-link class="mx-1" to="/contracts" v-if="isAuthenticated && !isAdmin">
+        Your contracts
+      </router-link> |
+      <router-link class="mx-1" to="/contracts/admin" v-if="isAuthenticated && isAdmin">
+        All contracts
+      </router-link> |
+      <router-link class="mx-1" to="/contracts/new" v-if="isAuthenticated && isAdmin">
+        New contract
+      </router-link>
     </div>
     <router-view/>
 
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    },
+    isAdmin () {
+      return this.$store.getters.isAdmin
+    }
+  }
+}
+
+</script>
 
 <style lang="scss">
 

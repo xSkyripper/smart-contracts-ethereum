@@ -43,16 +43,16 @@
           <div class="d-flex justify-content-center">
             <a href="#">Forgot your password?</a>
           </div>
+          <div class="d-flex justify-content-center">
+              {{ errorMsg }}
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios'
-import Vue from 'vue'
-import qs from 'qs'
-import $backend from '../backend'
+import { EventBus } from '@/utils'
 
 export default {
   name: 'LoginComponent',
@@ -62,18 +62,32 @@ export default {
   data () {
     return {
       user: {
-        password: '',
-        email: ''
-      }
+        email: '',
+        password: ''
+      },
+      errorMsg: ''
     }
   },
   methods: {
     login () {
-      $backend.login(qs.stringify(this.user))
-          .then(response => {
-            console.log(response)
-      });
+      // $backend.login(qs.stringify(this.user)).then(response => {
+      //   console.log(response)
+      // });
+      this.$store.dispatch('login', { email: this.user.email, password: this.user.password })
+        .then(() => {
+          this.$router.push('/')
+        })
     }
+  },
+
+  mounted () {
+    EventBus.$on('failedLogin', (msg) => {
+      this.errorMsg = msg
+    })
+  },
+
+  beforeDestroy () {
+    EventBus.$off('failedLogin')
   }
 }
 </script>
