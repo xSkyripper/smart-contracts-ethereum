@@ -1,5 +1,5 @@
 <template>
-  <div class="container contracts">
+  <div class="container contracts" style="min-height:68vh">
     <div class="d-flex justify-content-center">
       <div class="card">
         <div class="card-body mx-4">
@@ -57,6 +57,6 @@ export default {
   margin-top:30px;
 }
 .card {
-  background-color: rgba(0, 0, 0, 0.5) !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
 </style>
