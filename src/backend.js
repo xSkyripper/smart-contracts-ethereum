@@ -54,5 +54,15 @@ export default {
       ]
       resolve(contracts)
     })
+  },
+  onboard (payer) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    return axios.post('http://localhost:5000/onboard', payer, config)
+      .then(response => response)
   }
 }

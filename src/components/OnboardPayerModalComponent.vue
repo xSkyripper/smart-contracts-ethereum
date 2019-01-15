@@ -50,9 +50,8 @@
   </transition>
 </template>
 <script>
-import axios from 'axios'
-import Vue from 'vue'
 import qs from 'qs'
+import $backend from '../backend'
 export default {
   name: 'OnboardPayerModalComponent',
   data () {
@@ -72,14 +71,10 @@ export default {
       console.log(this.payer.gov_id)
       console.log(this.payer.user_ethereum_id)
       console.log(this.id)
-      const config = {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-      axios.post('http://localhost:5000/onboard', qs.stringify(this.payer), config).then(response => {
-        console.log(response)
-      })
+      $backend.onboard(qs.stringify(this.payer))
+        .then(response => {
+          console.log(response)
+        })
     }
   },
   props: {
