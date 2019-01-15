@@ -24,7 +24,7 @@ class Contract(Resource):
             return dict(error=f"There is no contract with Id {contract_id}"), 404
         
         cfg = current_app.config
-        contract_data = contract.to_dict()
+        contract_data = contract.to_dict(with_users=True)
         contract_data['abi'] = utils.get_payment_contract_abi(cfg)
         
         return dict(contract=contract_data), 200
