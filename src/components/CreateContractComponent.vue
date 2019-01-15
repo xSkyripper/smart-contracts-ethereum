@@ -41,7 +41,7 @@
             <div class="mb-3">
               <label for="walletId">Amount Due</label>
               <div class="input-group">
-                <input v-model="contract.amount_due" type="number" step="1" class="form-control" id="amount_dueamount_due" required>
+                <input v-model="contract.amount_due" type="number" step="10000" class="form-control" id="amount_dueamount_due" required>
                 <div class="invalid-feedback" style="width: 100%;">Amount due is required</div>
               </div>
             </div>
