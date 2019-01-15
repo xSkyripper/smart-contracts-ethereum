@@ -43,10 +43,10 @@ class Contract(db.Model):
             amount_due = payment_contract_amount_due_base + i * payment_contract_amount_due_base
 
             contract_eth_addr = scm.create_contract(
-                payment_contract_owner,
-                payment_contract_path,
-                payment_contract_meta['name'],
-                amount_due)
+                amount_due,
+                owner=payment_contract_owner,
+                contract_path=payment_contract_path,
+                contract_name=payment_contract_meta['name'])
 
             c = Contract(
                 name='{} {}'.format(payment_contract_meta['name'], i + 1),

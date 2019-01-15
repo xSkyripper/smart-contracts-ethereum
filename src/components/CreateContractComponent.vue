@@ -23,10 +23,10 @@
             </div>
 
             <div class="mb-3">
-              <label for="service">Service</label>
+              <label for="name">Name</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="service" placeholder="Service" required>
-                <div class="invalid-feedback" style="width: 100%;">Service is required</div>
+                <input v-model="contract.name" type="text" class="form-control" id="name" placeholder="name" required>
+                <div class="invalid-feedback" style="width: 100%;">Name is required</div>
               </div>
             </div>
 
@@ -34,19 +34,26 @@
               <label for="description">Description
                 <span class="text-muted">(Optional)</span>
               </label>
-              <input type="text" class="form-control" id="description" placeholder="Description">
+              <input v-model="contract.description" type="text" class="form-control" id="description" placeholder="Description">
               <div class="invalid-feedback">Description is optional</div>
             </div>
 
             <div class="mb-3">
               <label for="walletId">Amount Due</label>
               <div class="input-group">
-                <input type="number" step=".01" class="form-control" id="walletId" required>
+                <input v-model="contract.amount_due" type="number" step="1" class="form-control" id="amount_dueamount_due" required>
                 <div class="invalid-feedback" style="width: 100%;">Amount due is required</div>
               </div>
             </div>
 
-            <button class="btn float-right login_btn" type="submit">Create contract</button>
+            <div class="form-group">
+              <input
+                type="submit"
+                value="Create contract"
+                class="btn float-right login_btn"
+                @click.prevent="addContract"
+              >
+            </div>
           </form>
         </div>
         <div class="card-footer">
@@ -57,6 +64,9 @@
 </template>
 
 <script>
+import qs from 'qs'
+import $backend from '../backend'
+
 export default {
   name: 'CreateContractComponent',
   props: {
@@ -64,13 +74,19 @@ export default {
   },
   data () {
     return {
-      resources: [],
-      error: ''
+      contract: {
+        name: '',
+        description: '',
+        amount_due: ''
+      }
     }
   },
   methods: {
-    register () {
-      alert('Register')
+    addContract () {
+      $backend.addContract(qs.stringify(this.contract))
+          .then(response => {
+            console.log(response)
+      });    
     }
   }
 }

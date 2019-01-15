@@ -64,5 +64,16 @@ export default {
 
     return axios.post('http://localhost:5000/onboard', payer, config)
       .then(response => response)
+  },
+
+  addContract(info) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    return $axios.post('http://localhost:5000/api/contracts', info, config)
+      .then(response => response)
   }
 }
