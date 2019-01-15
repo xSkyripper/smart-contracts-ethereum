@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-center">
-    <div class="card py-2 mt-4">
-      <div class="card-body">
+    <div class="card">
+      <div class="card-body mx-4">
           <h1>{{ msg }}</h1>
       </div>
     </div>
@@ -37,7 +37,6 @@ a {
 .card {
   margin-top: auto;
   margin-bottom: auto;
-  width: 60%;
-  background-color: rgba(0, 0, 0, 0.8) !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 </style>

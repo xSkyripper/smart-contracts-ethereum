@@ -1,6 +1,12 @@
 <template>
   <div class="container contracts">
-    <h1>{{ msg }}</h1>
+    <div class="d-flex justify-content-center">
+      <div class="card">
+        <div class="card-body mx-4">
+          <h1>{{ msg }}</h1>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <ContractComponent
         v-for="r in contracts"
@@ -48,10 +54,9 @@ export default {
 
 <style lang="scss" scoped>
 .contracts {
-  h1 {
-    margin-bottom:30px;
-  }
-
   margin-top:30px;
+}
+.card {
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 </style>

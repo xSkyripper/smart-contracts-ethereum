@@ -1,6 +1,6 @@
 <template>
-  <div class="container" style="min-height:70vh">
-    <HelloWorld msg="Welcome to CryptoTax!"/>
+  <div class="container" style="min-height:68vh">
+    <HelloWorld msg="Welcome to CryptoTax"/>
   </div>
 </template>
 
