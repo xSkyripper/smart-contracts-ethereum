@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/contracts">Contracts</router-link> |
-      <router-link to="/contracts/admin">Contracts (Admin)</router-link> |
-      <router-link to="/contracts/new">New Contract (Admin)</router-link>
+    <div id="nav" class="py-3 mb-5" style="background-color: rgba(0, 0, 0, 0.8) !important;">
+      <router-link class="mx-1" to="/">Home</router-link> |
+      <router-link class="mx-1" to="/login">Login</router-link> |
+      <router-link class="mx-1" to="/register">Register</router-link> |
+      <router-link class="mx-1" to="/contracts">Contracts</router-link> |
+      <router-link class="mx-1" to="/contracts/admin">Contracts (Admin)</router-link> |
+      <router-link class="mx-1" to="/contracts/new">New Contract (Admin)</router-link>
     </div>
     <router-view/>
 
@@ -47,6 +47,10 @@ font-family: 'Numans', sans-serif;
   font-size: 50px;
   vertical-align: top;
   line-height: 100px;
+}
+.container {
+  height: 100%;
+  align-content: center;
 }
 
 </style>

@@ -1,6 +1,10 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="d-flex justify-content-center">
+    <div class="card py-2 mt-4">
+      <div class="card-body">
+          <h1>{{ msg }}</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,5 +32,12 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.card {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 60%;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 </style>
