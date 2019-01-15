@@ -16,7 +16,7 @@ from flask_web3 import current_web3
 
 from app import db, utils
 from app.test.test_User import run_tests
-from app.models import User as UserModel, Contract as ContractModel, Role
+from app.models import User, Contract, Role
 
 
 main_bp = Blueprint('main_bp', __name__,
@@ -61,35 +61,28 @@ def register():
     gov_id = request.form.get('gov_id')
     current_app.logger.info(f'Received PUT on user gov_id = {gov_id}')
 
-    # Get user object from the users (UserModel) table
-    user = User.query.filter_by(gov_id=gov_id).first()       
-    # Stop if the user does not exist
+    user = User.query.filter_by(gov_id=gov_id).first()
     if not user:
-        return jsonify(dict(error=f"There is no user with gov_id {gov_id}")), 404
+        user = User(registered=False)
 
-    if user.registered is True:
-        return jsonify(dict(error=f"User already exists in data base {gov_id}")), 409
-    
-    # Update User data, if present in the request
-    if request.form.get('gov_id'):
-        user.gov_id = request.form.get('gov_id')
-    if request.form.get('first_name'):
-        user.first_name = request.form.get('first_name')
-    if request.form.get('last_name'):
-        user.last_name = request.form.get('last_name')
-    if request.form.get('email'):
-        user.email = request.form.get('email')
-    if request.form.get('ethereum_id'):
-        user.ethereum_id = request.form.get('ethereum_id')
-    if request.form.get('password'):
-        user.password = request.form.get('password')
-    if request.form.get('contracts'):
-        user.contracts = request.form.get('contracts')
-    if request.form.get('role_id'):
-        user.role_id = request.form.get('role_id')
+    if not user.registered:
+        if request.form.get('gov_id'):
+            user.gov_id = request.form.get('gov_id')
+        if request.form.get('first_name'):
+            user.first_name = request.form.get('first_name')
+        if request.form.get('last_name'):
+            user.last_name = request.form.get('last_name')
+        if request.form.get('email'):
+            user.email = request.form.get('email')
+        if request.form.get('ethereum_id'):
+            user.ethereum_id = request.form.get('ethereum_id')
+        if request.form.get('password'):
+            user.password = request.form.get('password')
+        user.registered = True
 
-    user.registered = True
     try:
+        if not user:
+            db.session.add(user)
         db.session.commit()
     except exc.IntegrityError as e:
         current_app.logger.error(e)
@@ -99,7 +92,7 @@ def register():
     return jsonify(dict(etag=gov_id, user=user.to_dict())), 204
 
 
-@main_bp.route('/onboard', methods=['POST'])
+@main_bp.route('/onboard', methods=['GET', 'POST'])
 def onboard():
     contract_id = request.form.get('contract_id')
     gov_id = request.form.get('gov_id')
@@ -110,13 +103,11 @@ def onboard():
     if not all([contract_id, gov_id, user_ethereum_id]):
         return jsonify(dict(error=f'contract_id, gov_id and user_ethereum_id must be specified!')), 400
 
-
-    user = UserModel.query.filter_by(gov_id=gov_id).first()
+    user = User.query.filter_by(gov_id=gov_id).first()
 
     # Partially create user if it does not exist
     if not user:
-        user = UserModel(gov_id=gov_id,
-                         ethereum_id=user_ethereum_id)
+        user = User(gov_id=gov_id, ethereum_id=user_ethereum_id)
 
         try:
             db.session.add(user)
@@ -129,7 +120,7 @@ def onboard():
 
     if not contract_id:
         return jsonify(dict(error=f'contract_id must be specified!')), 400
-    contract = ContractModel.query.get(contract_id)
+    contract = Contract.query.get(contract_id)
     if not contract:
         return jsonify(dict(error=f"There is no contract with Id {contract_id}")), 404
     if user in contract.users:
