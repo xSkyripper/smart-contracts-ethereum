@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted: function() {
-    axios.get("http://localhost:5000/api/users/" + Vue.prototype.$username + "/contracts/").then(response => {
+    axios.get("http://localhost:5000/api/users/" + 12 + "/contracts/").then(response => {
         this.contracts = response.data.contracts
     })
   },
