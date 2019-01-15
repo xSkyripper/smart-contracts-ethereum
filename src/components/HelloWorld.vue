@@ -37,6 +37,6 @@ a {
 .card {
   margin-top: auto;
   margin-bottom: auto;
-  background-color: rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 </style>

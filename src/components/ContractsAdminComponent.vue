@@ -1,6 +1,6 @@
 <template>
-  <div class="container contracts" style="min-height:68vh">
-    <div class="d-flex justify-content-center">
+  <div class="container" style="min-height:68vh">
+    <div class="d-flex justify-content-center mb-5">
       <div class="card">
         <div class="card-body mx-4">
           <h1>{{ msg }}</h1>
@@ -53,10 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.contracts {
-  margin-top:30px;
-}
 .card {
-  background-color: rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 </style>
