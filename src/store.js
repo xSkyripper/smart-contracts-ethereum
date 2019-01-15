@@ -57,6 +57,8 @@ const mutations = {
     localStorage.setItem('token', token)
     state.token = token
   }
+
+  // TODO: retrieve cache from localStorage on init
 }
 
 const getters = {
