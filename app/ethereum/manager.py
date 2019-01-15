@@ -63,7 +63,7 @@ class Manager(object):
         logger.info('Ethereum address of the contract is "%s"', tx_receipt.contractAddress)
         return tx_receipt.contractAddress
 
-    def create_contract(self, owner, contract_path, contract_name, *contract_args, compile=False):
+    def create_contract(self, *contract_args, owner=None, contract_path=None, contract_name=None, compile=False):
         contract_build_path = self.get_contract_build_path(contract_path)
 
         if compile or not os.path.exists(contract_build_path):
