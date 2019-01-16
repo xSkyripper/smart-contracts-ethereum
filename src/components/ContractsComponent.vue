@@ -16,6 +16,8 @@
         :picture="r.picture"
         :amount_due="r.amount_due"
         :description="r.description"
+        :abi="r.abi"
+        :ethereum_address="r.ethereum_addr"
         :admin=false
       />
     </div>
@@ -46,6 +48,7 @@ export default {
   mounted: function() {
     $backend.fetchUserContracts().then(response => {
       this.contracts = response.data.contracts
+      console.log(this.contracts)
     })
   }
   // beforeMount () {

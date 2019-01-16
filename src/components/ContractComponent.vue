@@ -27,7 +27,7 @@
 </template>
 <script>
 import OnboardPayerModalComponent from '@/components/OnboardPayerModalComponent.vue'
-
+import $eth from '../ethereum'
 export default {
   name: 'ContractComponent',
   components: {
@@ -39,7 +39,9 @@ export default {
     picture: String,
     description: String,
     amount_due: Number,
-    admin: Boolean
+    admin: Boolean,
+    abi: Array,
+    ethereum_address: String
   },
   data () {
     return {
@@ -53,6 +55,31 @@ export default {
     },
     closeOnboardPayerModal () {
       this.isOnboardPayerModalVisible = false
+    },
+    pay () {
+      var web3
+      $eth.getWeb3().then((res, err) => {
+        web3 = res
+        window.myWeb3 = web3
+        window.myAbi = this.abi
+        window.myAddr = this.ethereum_address
+
+        $eth.getContract(web3, this.abi, this.ethereum_address).then((res, err) => {
+          var contract = res
+          console.log(res)
+
+          $eth.payContract(contract, this.amount_due).then(
+            (res, err) => {
+              if (err) {
+                console.error(err)
+              } else {
+                console.log('payed successfully', res)
+              }
+            })
+        })
+      })
+      // var contractInstance = $eth.getContract(this.abi).then((response) => response)
+      // $eth.payContract(contractInstance, this.ethereum_address, this.amount_due)
     }
   },
   filters: {

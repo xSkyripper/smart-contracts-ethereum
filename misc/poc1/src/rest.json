@@ -1,0 +1,25 @@
+
+ // {
+  //   "id": 1,
+  //   "name": "E-On",
+  //   "picture": "images/e_on.jpg",
+  //   "due_date": "2018-11-29",
+  //   "service": "Gas",
+  //   "location": "Iasi, Iasi"
+  // },
+  // {
+  //   "id": 2,
+  //   "name": "ANAF",
+  //   "picture": "images/anaf.jpg",
+  //   "due_date": "2018-12-05",
+  //   "service": "Car Tax",
+  //   "location": "Iasi, Iasi"
+  // },
+  // {
+  //   "id": 3,
+  //   "name": "City Hall",
+  //   "picture": "images/iasi.jpg",
+  //   "due_date": "2018-12-01",
+  //   "service": "Garbage Tax",
+  //   "location": "Iasi, Iasi"
+  // }
