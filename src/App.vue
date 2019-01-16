@@ -1,25 +1,25 @@
 <template>
   <div id="app">
     <div id="nav" class="py-3 mb-5" style="background-color: rgba(0, 0, 0, 0.8) !important;">
-      <router-link class="mx-1" to="/">
+      <router-link class="mx-1 item-nav" to="/">
         Home
-      </router-link> |
-      <router-link class="mx-1" to="/login" v-if="!isAuthenticated">
+      </router-link>
+      <router-link class="mx-1 item-nav" to="/login" v-if="!isAuthenticated">
         Login
-      </router-link> |
-      <router-link class="mx-1" to="/register" v-if="!isAuthenticated">
+      </router-link>
+      <router-link class="mx-1 item-nav" to="/register" v-if="!isAuthenticated">
         Register
-      </router-link> |
-      <router-link class="mx-1" to="/contracts" v-if="isAuthenticated && !isAdmin">
+      </router-link>
+      <router-link class="mx-1 item-nav" to="/contracts" v-if="isAuthenticated && !isAdmin">
         Your contracts
-      </router-link> |
-      <router-link class="mx-1" to="/contracts/admin" v-if="isAuthenticated && isAdmin">
+      </router-link>
+      <router-link class="mx-1 item-nav" to="/contracts/admin" v-if="isAuthenticated && isAdmin">
         All contracts
-      </router-link> |
-      <router-link class="mx-1" to="/contracts/new" v-if="isAuthenticated && isAdmin">
+      </router-link>
+      <router-link class="mx-1 item-nav" to="/contracts/new" v-if="isAuthenticated && isAdmin">
         New contract
       </router-link>
-      <a href="#" @click.prevent="logout" v-if="isAuthenticated">Logout</a>
+      <a href="#" class="item-nav" @click.prevent="logout" v-if="isAuthenticated">Logout</a>
     </div>
     <router-view/>
 
@@ -67,6 +67,8 @@ font-family: 'Numans', sans-serif;
   color: white;
 }
 #nav {
+  display: flex;
+  justify-content: center;
   padding: 30px;
   a {
     font-weight: bold;
@@ -86,6 +88,11 @@ font-family: 'Numans', sans-serif;
 .container {
   height: 100%;
   align-content: center;
+}
+
+.item-nav + .item-nav::before {
+    content: "     |     ";
+    color: white;
 }
 
 </style>
