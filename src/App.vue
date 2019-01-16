@@ -19,6 +19,7 @@
       <router-link class="mx-1" to="/contracts/new" v-if="isAuthenticated && isAdmin">
         New contract
       </router-link>
+      <a href="#" @click.prevent="logout" v-if="isAuthenticated">Logout</a>
     </div>
     <router-view/>
 
@@ -33,6 +34,14 @@ export default {
     },
     isAdmin () {
       return this.$store.getters.isAdmin
+    }
+  },
+  methods: {
+    logout () {
+      console.log('logout')
+      this.$store.dispatch('invalidateSession').then(() => {
+        this.$router.push('/login')
+      })
     }
   }
 }

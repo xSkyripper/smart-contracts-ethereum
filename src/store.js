@@ -28,6 +28,13 @@ const actions = {
         console.log('Error on login: ', error)
         EventBus.$emit('failedLogin: ', error)
       })
+  },
+
+  invalidateSession (context) {
+    return new Promise((resolve, reject) => {
+      context.commit('removeSession')
+      resolve()
+    })
   }
 
   // register (context, userData) {
@@ -56,6 +63,13 @@ const mutations = {
     console.log('setJwtToken payload: ', token)
     localStorage.setItem('token', token)
     state.token = token
+  },
+
+  removeSession (state) {
+    console.log('removeSession')
+    state.token = ''
+    state.userData = {}
+    state.contracts = []
   }
 
   // TODO: retrieve cache from localStorage on init
