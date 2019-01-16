@@ -34,28 +34,9 @@ export default {
       .then(response => response)
   },
 
-  fetchUserContracts (userId) {
-    // return $axios.get(`api/users/{userId}/contracts`).then()
-    console.log(`fetchUserContracts for ${userId}`)
-    return new Promise((resolve, reject) => {
-      const contracts = [
-        {
-          id: 1,
-          name: 'Contract 1',
-          picture: 'someLink',
-          amount_due: 232323,
-          description: 'Description 1'
-        },
-        {
-          id: 2,
-          name: 'Contract 2',
-          picture: 'someLink 2',
-          amount_due: 2323232,
-          description: 'Description 2'
-        }
-      ]
-      resolve(contracts)
-    })
+  fetchUserContracts () {
+    const userId = store.getters.currentUser
+    return $axios.get(`api/users/${userId}/contracts`).then()
   },
 
   fetchAllContracts () {

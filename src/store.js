@@ -84,6 +84,9 @@ const getters = {
   },
   getJwtToken (state) {
     return state.token
+  },
+  currentUser (state) {
+    return state.userData.id
   }
 }
 
