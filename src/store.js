@@ -31,10 +31,16 @@ const actions = {
   },
 
   invalidateSession (context) {
+    console.log('invalidateSession')
     return new Promise((resolve, reject) => {
       context.commit('removeSession')
       resolve()
     })
+  },
+
+  saveState (context) {
+    console.log('saveState')
+    localStorage.setItem('state', JSON.stringify(state))
   }
 
   // register (context, userData) {
@@ -55,13 +61,11 @@ const mutations = {
 
   setUserData (state, userData) {
     console.log('setUserData payload: ', userData)
-    localStorage.setItem('userData', userData)
     state.userData = userData
   },
 
   setJwtToken (state, token) {
     console.log('setJwtToken payload: ', token)
-    localStorage.setItem('token', token)
     state.token = token
   },
 
@@ -70,8 +74,17 @@ const mutations = {
     state.token = ''
     state.userData = {}
     state.contracts = []
-  }
+  },
 
+  loadState (state) {
+    console.log('loadState')
+    var loadedState = localStorage.getItem('state')
+    if (loadedState) {
+      this.replaceState(
+        Object.assign(state, JSON.parse(loadedState))
+      )
+    }
+  }
   // TODO: retrieve cache from localStorage on init
 }
 
@@ -87,6 +100,9 @@ const getters = {
   },
   currentUser (state) {
     return state.userData.id
+  },
+  currentUserData (state) {
+    return state.userData
   }
 }
 
@@ -95,6 +111,10 @@ const store = new Vuex.Store({
   actions,
   mutations,
   getters
+})
+
+store.subscribe((mutation, state) => {
+  store.dispatch('saveState')
 })
 
 window.store = store

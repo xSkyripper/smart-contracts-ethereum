@@ -19,7 +19,8 @@
       <router-link class="mx-1 item-nav" to="/contracts/new" v-if="isAuthenticated && isAdmin">
         New contract
       </router-link>
-      <a href="#" class="item-nav" @click.prevent="logout" v-if="isAuthenticated">Logout</a>
+      
+      <a href="#" class="item-nav" @click.prevent="logout" v-if="isAuthenticated">Logout ({{ currentUserEmail }})</a>
     </div>
     <router-view/>
 
@@ -34,6 +35,9 @@ export default {
     },
     isAdmin () {
       return this.$store.getters.isAdmin
+    },
+    currentUserEmail () {
+      return this.$store.getters.currentUserData.email
     }
   },
   methods: {
